@@ -1,0 +1,9 @@
+형변환
+(자료형)변수명 or 값
+int  score = 90;
+float score_f = (float) score ; // float _f 라는 변수에 score값을 실수로 변환에서 저장한다는 뜻
+int -> long -> float -> double은 묵시적 형 변환(=자동형변환)
+
+double score_d = 98.9;
+int  score = (int) score_d; 큰 데이터 타입을 작은걸로 변환시 손실이 있을 수 있어 타입형 명시
+// 정수로 바꿀시 98이라는 값이 나옴 소수점 부분이 소실 

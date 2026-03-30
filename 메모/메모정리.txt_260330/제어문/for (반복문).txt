@@ -1,0 +1,32 @@
+for (반복문)
+for ( 초기식,조건식,증감식){
+  // 반복해서 실행하는 영역
+}
+// (1) 초기식 : 이 반복문 안에서 사용할 변수
+// ex) int i = 0;
+// (2) 조건식 : 반복할 수 있는 횟수를 정하는 조건 
+// ex) int i < str.length;
+// (3) 증감식
+// 실행이 끝나고 마지막에 실행되는 코드
+// ex) i++
+
+## 향상된 for문
+
+**카운터 변수와 증감식을 사용하지 않고, 항목의 개수만큼 반복한 후 자동으로 for문을 빠져나간다.**
+
+```java
+for(자료형 변수 : 배열){
+    실행코드
+}
+```
+//배열 변수 선언과 배열 생성
+		int[] scores = { 95, 71, 84, 93, 87 };
+		//배열 항목 전체 합 구하기
+		int sum = 0;
+		for (int score : scores) {
+			sum = sum + score;
+		}
+		System.out.println("점수 총합 = " + sum);
+		//배열 항목 전체 평균 구하기
+		double avg = (double) sum / scores.length;
+		System.out.println("점수 평균 = " + avg);

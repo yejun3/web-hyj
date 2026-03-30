@@ -37,10 +37,15 @@ public class WhileExample {
 	//키보드에서 정수를 하나 입력받아서 각 자리의 합을 더한 결과를 출력하세요
     // 예를 들어 12345를 입력받았다면 1+2+3+4+5를 더한 15를 출력하기
 	Scanner sc = new Scanner(System.in);
+	System.out.print("정수: " );
+	
 	int num = sc. nextInt(); 
-	int sum = 0;
-
-	System.out.println("정수: ");
+	int sum = 0;//총합을 담을 변수
+   while(num != 0)
+   {    sum +=num % 10;// num%10 수의 끝자리만 남김 
+        num = num/10;
+		   }
+    	System.out.println("총합: " + sum);
 	
 	}
 

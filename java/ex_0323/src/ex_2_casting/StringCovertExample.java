@@ -13,7 +13,7 @@ public class StringCovertExample {
 		//기본타입 -> 문자열
 		//String.value0f(데이터)
 		String str1 = String.valueOf(10);
-		Strung str2 = String.valueOf(3.14);
+		String str2 = String.valueOf(3.14);
 		String str3 = String.valueOf("true");
 		System.out.println(str1);
 		System.out.println(str2);

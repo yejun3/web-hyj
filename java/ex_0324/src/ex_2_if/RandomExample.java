@@ -12,7 +12,7 @@ public class RandomExample {
 		
 		int num = (int)(Math.random()*6 ) + 1; // 1<= X 
 		
-		<7
+		
 		
 		// 어떤 주사위 눈이 나왔는지 출력하기
 		//1이 나왔습니다.
