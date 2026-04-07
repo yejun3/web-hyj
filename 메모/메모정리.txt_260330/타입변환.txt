@@ -1,0 +1,205 @@
+타입변환
+
+public class ChildExample {
+	public static void main(String[] args) {
+		//자식 객체 생성
+		Child child = new Child();
+
+		//자동 타입 변환
+		Parent parent = child;
+
+ 강제 타입변환
+일회성으로 타입 변환이 필요할 때는
+((자식클래스명)객체명).메서드명();
+
+자식클래스의 멤버에 접근이 여러번 필요한 경우
+객체명 = (자식클래스명)부모타입;
+
+//객체 생성 및 자동 타입 변환
+		Parent parent = new Child();
+
+//강제 타입 변환
+		Child child = (Child) parent;
+
+Parent 타입은 Child클래스만의 필드와 메소드는 사용불가
+Child 타입으로 Child클래스의 필드와 메소드 사용
+------------------------------------------------------------------------------
+public class Parent {
+	//필드 선언
+	public String field1;
+
+	//메소드 선언
+	public void method1() {
+		System.out.println("Parent-method1()");
+	}
+
+	//메소드 선언
+	public void method2() {
+		System.out.println("Parent-method2()");
+	}
+}
+
+package ch07.sec07.exam03;
+
+public class Child extends Parent {
+	//필드 선언
+	public String field2;
+
+	//메소드 선언
+	public void method3() {
+		System.out.println("Child-method3()");
+	}
+}
+package ch07.sec07.exam03;
+
+public class ChildExample {
+	public static void main(String[] args) {
+		//객체 생성 및 자동 타입 변환
+		Parent parent = new Child();
+
+		//Parent 타입으로 필드와 메소드 사용
+		parent.field1 = "data1";
+		parent.method1();
+		parent.method2();
+		/*
+		parent.field2 = "data2";      	//(불가능)
+		parent.method3();         		//(불가능)
+		*/
+
+		//강제 타입 변환
+		Child child = (Child) parent;
+
+		//Child 타입으로 필드와 메소드 사용
+		child.field2 = "data2";  		//(가능)
+		child.method3();     			//(가능)
+	}
+}
+-------------------------------------------------------------------------------------
+### 필드 다형성
+
+- 필드 타입은 동일하지만(사용 방법은 동일하지만), 대입되는 객체가 달라져서 실행결과가 다양하게 나올 수 있는 것을 말한다.
+
+```java
+package ch07.sec08.exam01;
+
+public class Tire {
+	//메소드 선언
+	public void roll() {
+		System.out.println("회전합니다.");
+	}
+}
+
+package ch07.sec08.exam01;
+
+public class HankookTire extends Tire {
+	//메소드 재정의(오버라이딩)
+	@Override
+	public void roll() {
+		System.out.println("한국 타이어가 회전합니다.");
+	}
+}
+
+package ch07.sec08.exam01;
+
+public class KumhoTire extends Tire {
+	//메소드 재정의(오버라이딩)
+	@Override
+	public void roll() {
+		System.out.println("금호 타이어가 회전합니다.");
+	}
+}
+```
+
+public class Car {
+	//필드 선언
+	public Tire tire;
+
+	//메소드 선언
+	public void run() {
+		//tire 필드에 대입된 객체의 roll() 메소드 호출
+		tire.roll();
+	}
+}
+
+package ch07.sec08.exam01;
+
+public class CarExample {
+	public static void main(String[] args) {
+		//Car 객체 생성
+		Car myCar = new Car();
+
+		//Tire 객체 장착
+		myCar.tire = new Tire();
+		myCar.run();
+
+		//HankookTire 객체 장착
+		//HankookTire클래스가 Tire를 상속받기 때문에 가능
+		myCar.tire = new HankookTire();
+		myCar.run();
+
+		//KumhoTire 객체 장착
+		//KumhoTire클래스가 Tire를 상속받기 때문에 가능
+		myCar.tire = new KumhoTire();
+		myCar.run();
+	}
+}
+--------------------------------------------------
+### 매개변수 다형성
+
+- 다형성은 필드보다는 메소드를 호출할 때 많이 발생한다.
+- 메소드가 클래스 타입 매개변수를 가지고 있을 경우, 호출할 때 동일한 타입의 객체를 제공하는 것이 정석적이지만 자식 객체를 제공할 수도 있다.
+
+
+public class Vehicle {
+	//메소드 선언
+	public void run() {
+		System.out.println("차량이 달립니다.");
+	}
+}
+
+package ch07.sec08.exam02;
+
+public class Bus extends Vehicle {
+	//메소드 재정의(오버라이딩)
+	@Override
+	public void run() {
+		System.out.println("버스가 달립니다.");
+	}
+}
+
+package ch07.sec08.exam02;
+
+public class Taxi extends Vehicle {
+	//메소드 재정의(오버라이딩)
+	@Override
+	public void run() {
+		System.out.println("택시가 달립니다.");
+	}
+}
+
+package ch07.sec08.exam02;
+
+public class Driver {
+	//메소드 선언(클래스 타입의 매개변수를 가지고 있음)
+	//drive()메소드 호출 시 매개 변수의 매개값으로 Vehicle의 자식 객체가 들어올 수 있다.
+	public void drive(Vehicle vehicle) {
+		vehicle.run();
+	}
+}
+
+package ch07.sec08.exam02;
+
+public class DriverExample {
+	public static void main(String[] args) {
+		//Driver 객체 생성
+		Driver driver = new Driver();
+
+		//매개값으로 Bus 객체를 제공하고 driver() 메소드 호출
+		Bus bus = new Bus();
+		driver.drive(bus);
+
+		//매개값으로 Taxi 객체를 제공하고 driver() 메소드 호출
+		Taxi taxi = new Taxi();
+		driver.drive(taxi);
+	}
+}
