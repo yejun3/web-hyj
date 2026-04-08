@@ -1,6 +1,7 @@
 package ex7_regex;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.regex.Pattern;
 
 public class PatternExample {
@@ -72,7 +73,27 @@ public class PatternExample {
 		  regExp="[a-zA-Z0-9_]+@(naver|gmail).com";
 		String id2 = "test01@gmail.com";
 		System.out.println(id2.matches(regExp));
-		  
+		
+		
+		String[] arr = {"123","abc","4567","a1b2"};
+		regExp = "[0-9]+";
+		for(String s: arr) {
+			if(s.matches(regExp)) {
+				System.out.println(s);
+			}
+		}
+		
+		String [] arr2 = {"홍길동","tom","김철수","기이갑조현을"};
+		regExp = "[가-힣]{2,5}";
+		for(String a: arr2) {
+			if(a.matches(regExp)) {
+				System.out.println(a);
+			}
+		}
+		
+		
+		
+		
 	}
 
 }
