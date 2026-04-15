@@ -1,0 +1,7 @@
+### 패키지와 타입 정보 얻기
+
+- 패키지와 타입(클래스, 인터페이스)이름 정보는 다음 메소드를 통해 얻을 수 있다.
+메소드	                                용도
+Package getPackage()	        패키지 정보 읽기
+String getSimpleName()	패키지를 제외한 타입 이름
+String getName()	                패키지를 포함한 전체 타입 이름

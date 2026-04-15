@@ -1,0 +1,171 @@
+
+문자열타입(String)
+
+import 패키지명.클래스명; //특정 클래스만 불러오기
+import 패키지명.*; //패키지 안의 모든 클래스 불러오기
+import java.util.Scanner; //Scanner클래스 호출
+Scanner 객체명 = new Scanner(System.in); //Scanner 객체 선언
+int 변수명 = 객체명.메서드(); //입력받기
+
+public class ScannerExample {
+	public static void main(String[] args)
+		//Scanner 객체명 = new Scanner(System.in);
+		Scanner sc = new Scanner(System.in);
+		String name,address;
+		int age;
+		double weight;
+		System.out.print("이름 : ");
+		name = sc.next();
+		System.out.print("나이 : ");
+		age = sc.nextInt();
+		System.out.print("주소 : ");
+		address = sc.next();
+		System.out.print("체중 : ");
+		weight = sc.nextDouble();
+
+		System.out.printf("당신의 이름은 %s입니다.\\n",name);
+		System.out.printf("당신의 나이는 %d입니다.\\n",age);
+		System.out.printf("당신의 주소는 %s입니다.\\n",address);
+		System.out.printf("당신의 체중은 %.1fkg입니다.\\n",weight);
+	}
+}
+
+## 관계(비교)연산자
+
+- 동등 ( ==, !=), 또는 크기( <, <=, >, >=)를 평가해서 boolean 타입인 true/false를 산출한다
+
+비교 연산자는 흐름 제어문인 조건문(if), 반복문(for,while)에서 실행 흐름을 제어할 때 주로 사용된다.
+
+문자열을 비교할 때는 동등(==, !=)연산자 대신 equals()와 !equals()를 사용한다.
+
+## 논리연산자
+
+- 논리곱(&&), 논리합(||), 논리부정(!)연산을 수행한다.
+- 논리 연산의 흐름은 제어문인 조건문(if),반복문(for,while)등에서 주로 이용된다.
+
+
+
+### 조건문의 종류
+
+- 조건문에는 크게 if문과 switch문이 있다.
+- 고려해야 하는 조건이 적으면 if, 많으면 switch를 사용하는것이 효율적이다.
+- 하지만 특정 개수에 따라 반드시 둘 중 하나를 선택해야 하는 것인 아니다.
+단순 if문
+if(조건식)
+  조건식이 참일 때 실행할 문장.
+int score = 93;
+
+		if(score >= 90) {
+			System.out.println("점수가 90보다 큽니다.");
+			System.out.println("등급은 A입니다.");
+		}
+
+if - else
+
+기본형
+if(조건식){
+  조건식이 참일 때 실행할 문장.
+} else {
+  조건식이 거짓일 때 실행할 문장.
+}
+
+### if문의 중첩
+
+- 제어문은 자유롭게 중첩해서 사용할 수 있습니다.
+- if문 안에 if문이 있는 경우
+
+```java
+if(조건식1){
+  if(조건식2){
+      조건식1,2가 모두 참일 때 실행할 문장
+  }
+}
+```
+
+switch문
+
+기본형
+switch(비교값){
+case 조건값1 :
+    비교값과 조건값이 일치할 때 실행할 문장.
+    break;
+case 조건값2 :
+    비교값과 조건값이 일치할 때 실행할 문장.
+    break;
+case 조건값3 :
+    비교값과 조건값이 일치할 때 실행할 문장.
+    break;
+default ://비교값과 일치하는 조건값이 없을 때 실행된다.
+	코드;
+}
+
+	char grade = 'B';
+
+		switch(grade) {
+			case 'A', 'a' -> {
+				System.out.println("우수 회원입니다.");
+			}
+			case 'B', 'b' -> {
+				System.out.println("일반 회원입니다.");
+			}
+			default -> {
+				System.out.println("손님입니다.");
+			}
+		}
+
+		switch(grade) {
+			case 'A', 'a' -> System.out.println("우수 회원입니다.");
+			case 'B', 'b' -> System.out.println("일반 회원입니다.");
+			default -> System.out.println("손님입니다.");
+		}
+
+
+### 반복문의 종류
+
+- for, while
+
+## for문
+
+- 주로 반복 횟수가 정해져 있을 때 사용하는 문법
+
+```java
+for(초기식; 조건식; 증감식){
+	조건식이 참일때 반복할 명령
+}
+```
+```java
+ }
+```
+
+## 다중 for문
+
+- for문안에 또 다른 for문을 사용하는 경우를 말한다.
+- for문을 중첩하여 사용하기 때문에 코드가 어려워 보일 수 있으나 반복문의 원리는 같다.
+
+```java
+for(초기식;조건식;증감식){
+	for(초기식;조건식;증감식){
+
+	}
+}
+```
+while문
+while(조건식){
+    조건식이 참일때 반복할 명령
+}
+
+do-while문
+do{
+	조건식이 참일 때 실행할 명령;
+}while(조건식);
+
+
+
+index
+위치번호를 세는 방식
+왼쪽부터 오른쪽으로 0부터 시작
+띄어쓰기도 한자리로 셈
+길이는 갯수를 의미
+위치는 몇 번째인지
+
+마지막 index :길이 -1

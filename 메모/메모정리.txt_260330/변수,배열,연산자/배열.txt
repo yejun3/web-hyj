@@ -34,7 +34,7 @@ System.out.print( i )
 2차원 배열
 자료형변수명 [ ] [ ]= new 자료형 [첫번째 배열 크기] [첫번째에 들어있는 두번째 배열 크기] 
  int number [ ] [ ] = new int [ ] [ ] {
-};
+};aad
 
  int number [ ] [ ] = new int [1] [2 ] {
         {0} {1,2} 

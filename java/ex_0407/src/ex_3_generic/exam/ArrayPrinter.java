@@ -12,9 +12,18 @@ public class ArrayPrinter {
 	// 접근제한자 제네릭 반환형 매서드명(){}
 	
 		//배열 타입은 아직 정해지지 않았으므로 타입은 T
+	//	public <T> void printArray(T[]arr) {
+	//		for(int i =0; i<arr.length; i++) {
+	//			System.out.println(arr[i]);
+	//		}
+	//	}
+
+//향상된 for문
 		public <T> void printArray(T[]arr) {
-			for(int i =0; i<arr.length; i++) {
-				System.out.println(arr[i]);
-			}
+		for(T j:arr) {
+			System.out.println(j);
 		}
+		}
+
+
 }
