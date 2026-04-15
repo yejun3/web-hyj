@@ -39,12 +39,17 @@ public class Main {
     // Function<T, R>: 입력 → 출력 구조
     // 여기서는 Product를 받아서 수정 후 다시 반환
     Function<Product, Product> priceIncrease = p -> {
-        p.setPrice((int)(p.getPrice() * 1.1));
-        return p;
+        p.setPrice((int)(p.getPrice() * 1.1));//가격수정
+        return p; // 수정된 객체 반환
     };
-
+    /*Consumer<Product> priceIncrease = p -> {
+        p.setPrice((int)(p.getPrice() * 1.1));
+    }; return 없음
+    */
+    
     service.updateProduct("P001", priceIncrease);
 
+    
     // 문자열 공백 제거
     Function<Product, Product> trimName = p -> {
         p.setName(p.getName().trim());
