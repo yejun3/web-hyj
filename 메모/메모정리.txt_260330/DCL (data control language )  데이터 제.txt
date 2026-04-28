@@ -1,0 +1,40 @@
+DCL (data control language ) : 데이터 제어어
+
+-데이터배이스에서 사용자 권한을 관리하는 SQL이다.
+GRANT : 권한을 부여
+REVOKE : 권한을 회수
+
+DCL이 필요한 이유
+-모든 사용자에게 모든 권한을 주면 위험해진다.
+
+MYSQL에서는 사용자를 다음과 같이 구분한다.
+'사용자명'@'접속자위치'
+'teacher'@'localhost'
+
+사용자 생성하는 법
+create user '사용자명'@'접속자위치'
+identified by '비밀번호';
+
+ //'사용자명'@'%' -> 모든 위치에서 접속이 가능
+
+모든 위치에서 접속이 가능한 'test_user' 사용자를 생성하세요
+비밀번호는 1234입니다.
+
+test_user에게 sakila 데이터베이스의 film 테이블에 조화, 추가 권한을 부여하세요
+
+test_user의 권한을 확인하세요
+
+test_user에게 부여한 sakila.film의 조회권한을 회수하세요
+
+test_user를 삭제하세요
+
+TCL(Transaction Conrol Language)
+트랜잭션 : 하나의 작업 묶음
+
+update acount set banlance -1000 where id = 1;
+update acount set banlance +1000 where id = 2;
+
+commit
+-작업을 최종 확정
+
+
