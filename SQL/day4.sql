@@ -20,8 +20,8 @@ where char_length(title)<= 10;
 -- Upper(), UCASE()
 -- 문자열을 대문자로 변환
 select upper('Hellow MySQL');
-
 -- 검색에서 대소문자 무시하고 비교하고 싶을 때 사용
+
 create table customer_practice as 
 select*from sakila.customer;
 
@@ -29,7 +29,6 @@ select*from customer_practice;
 
 -- LOWER()
 -- 모든 글자를 소문자로 출력
-
 -- CUSTOMER 테이블의 이름을 소문자로 조회하기
 select first_name, lower(first_name) from customer_practice;
 
@@ -42,6 +41,7 @@ select LTRIM ('   HI   '); -- 왼쪽 공백제거
 select RTRIM ('   HI   '); -- 오른쪽 공백제거
 
 SELECT TRIM(BOTH 'X' FROM 'XXXHELLOWXXX');
+
 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
 
