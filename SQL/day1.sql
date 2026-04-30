@@ -184,3 +184,22 @@ constraint ban_date check(birth >='1980-01-01')
 
 # GENDER에 들어갈 수 있는 데이터는 M과 W만 들어가면 좋겠어
 # Null이 들어 오면 무결성이 깨진다.
+
+-- CONCAT() : 나열된 문자열의 연결 //null을 포함하고 있으면 null이 나옴
+select CONCAT('A',null,'B');
+-- CONCAT_WS() : 여러값을 하나로 문자로 합칠 떄 구분자를 자동으로 넣어주는 함수
+select CONCAT_WS('-','A',null,'B');
+
+-- SQL의 null 전파 규칙
+-- null이 포함된 연산은 결과도 null
+select 10+null; -- null
+select 'A'+null; -- null
+
+select*from member;
+-- INNULL() : NULL을 다른 문자열로 치환
+select CONCAT(name,'->',char_length(name),', ',ifnull(nickname,'없음'),'->',ifnull(char_length(nickname),'0'))
+from member;
+
+select CHAR_LENGTH(nickname) from member;
+select SUBSTRING_INDEX('Aa-B-C-D','-',3);
+
