@@ -1,0 +1,105 @@
+집계함수(그룹함수)
+- 하나이상의 행에 대한 값들의 대해 집계(개수,총합,평균,최대,최소)하여 1개의 값으로 반환
+- 일반적으로는 일반 속성과 집계함수를 select절에서 같이 사용 할 수 없다.
+- null값은 집계하지 않는다.
+
+select avg(salary) from employees;
+
+group by 
+같은 데이터를 묶어서 집계할 때 사용하는 문법
+-부서별
+-상품별
+-카테고리별
+
+select department_id avg(salary)
+from employees 
+group by department_id
+
+그룹을 지을 떄  한가지 속성만 쓸 수 있는 것은 아님
+--  여러가지 기준으로 그룹을 지을 수 있다.
+select department_id, job_id, avg(salary)
+from employees
+group by department_id,job_id;
+
+having 
+- group by로 만든 그룹을 조건으로 필터링 할때 사용하는 문법
+- where은-> 전체 행에 대한 필터링
+- having -> 그룹핑을 하고난 다음 필터링
+- group by절 뒤에 적어야 한다.
+
+실행순서 
+select -5
+from -1
+where -2
+group by -3
+having -4
+
+ROLLUP
+- 결과에 중간 합계와 총 합계까지 자동으로 추가해주는 기능
+- group by 절에 with rollup
+
+정렬 (order by)
+- 조회 결과를 순서로 정렬할 떄 사용하는 문법
+- 오름차순(ASC) : 작은거 -> 큰거
+- 내림차순(DESC) : 큰거 -> 작은거
+
+select절의 맨 뒤에 적는다.
+
+select 컬럼명
+from 테이블명
+order by 정렬기준컬럼 정렬방식;
+
+오름차순
+숫자: 작은값 -> 큰값
+문자 : ㄱ -> ㅎ, A-Z
+날짜 : 오래된 날짜 -> 최신 날짜
+
+여러개의 컬럼으로 정렬할 수 있다.
+ORDER BY 정렬컬럼1, 정렬방식, 정렬컬럼2 정렬방식...;
+
+순위를 정하는 함수(윈도우 함수)
+- ROW_NUMBER() -무조건 1,2,3,4처럼 번호를 붙인다.
+- RANK() : 공동순위를 인정하고, 다음 순위를 건너뛴다.
+- DESK_RANK() : 공동 순위를 인정하지만 다음 순위를 건너뛰지 않는다.
+- NTILE(n) : 데이터를 n개의 그룹으로 나눈다.
+- PERCENT_RANK() : 상대적인 순위 비율을 구한다.
+
+순위함수() OVER(ORDER BY 정렬기준 컬럼 정렬기준)
+
+index
+테이블에서 데이터를 더 빠르게 찾기 위해서 만드는 검색용 목차
+
+인덱스가 없는 경우
+id     이름        나이
+1      김철수     20
+2      이영희     22
+3      박민수     21
+4      최유리     23
+
+select * from student where name = '박민수';
+인덱스가 없으면 MySQL은 데이터를 처음부터 하나씩 확인한다.
+이런 방식을 Full Table Scan(전체 테이블 스캔)이라고 한다.
+
+인덱스 생성 기본 문법
+create index 인덱스명
+on 테이블명 (컬럼명)
+
+create index idx_student_name
+on student(name);
+
+name값을 기준으로 정렬된 별도의 구조를 만든다.
+[김철수] -> 데이터 위치
+[박민수] -> 데이터 위치
+[이영희] -> 데이터 위치
+
+실제 테이블을 이름순으로 바꾸는 게 아니라,이름순으로 찾기 좋은 별도의 목차를 만든다.
+
+예시) 학교 전교생 3천명이 있음 홍길동을 찾음
+Full Table Scan(전체 테이블 스캔)은 한명한명  이름을 확인해서 찾음
+index 방식은 반별로 출석부를 봄
+
+쿼리를 사용하면 자동으로 index가 사용이 된다.
+select * from student where name = '박민수';
+
+인덱스를 확인하는 방법
+SHOW INDEX FROM 테이블명;
