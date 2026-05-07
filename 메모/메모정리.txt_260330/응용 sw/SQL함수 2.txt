@@ -35,4 +35,4 @@ ROLLUP
 -- DENSE_RANK()
 -- 공동순위는 있지만 건너뛰지는 않음
 
--- ROW_NUMBER() : 무조건 순서대로 번호
+-- ROW_NUMBER() : 무조건 순서대로 번호   

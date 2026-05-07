@@ -149,7 +149,7 @@ INSERT INTO board(category, title, created_at) VALUES
 -- BOARD 테이블에서 idx_board_category_created 인덱스를 사용해서
 -- CATEGORY= '공지' 조건 데이터를 찾았고, 역순으로 읽었으며
 -- 예상 비용은 0.8(cpu 사용량, 디스크 읽기, 메모리 사용량)
--- 예상 결과 행 수는 3개이다.
+-- category = '공지'인 행의  예상 결과 수는 3개이다.
 
 show index from BOARD;
 
