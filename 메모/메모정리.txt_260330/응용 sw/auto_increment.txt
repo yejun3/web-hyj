@@ -1,0 +1,136 @@
+auto_increment
+- 숫자값을 자동으로 1씩 증가시켜서 입력해주는 속성
+- 데이터를 추가할떄마다 작접 번호를 입력하면 번거롭기 때문에 사용을한다.
+- 반드시 숫자타입의 컬럼에만 붙여야한다.
+- 인덱스가 있어야 하기 때문에 pk와 함께 사용한다.
+- 한 테이블에 하나만 사용 가능하다.
+- 직접 값을 넣을 수도 있다.
+insert into board(board_id,title,content)
+values (100,'관리자공지','직접번호입력');
+그 다음 자동 증가 값은 보통 101부터 시작한다.
+- 중간 번호는 재사용하지 않는다.
+1 첫번째글
+2. 두번째 글
+3. 세번째 글
+
+delete from board
+where board_id =3 
+
+새글을 추가하게되면 board_id가 4로 추가된다.
+- auto_increment는 연속번호 보장용이 아니라 고유 식별자 생성용이다.
+
+- insert 했다가 rollback해도 다음 번호로 건너뛴다.
+- 테이블 생성 후 다음 자동 증가값을 바꿀수 있다.
+alter table 테이블명 auto_increment = 1000;
+이후 새 테이터는 1000부터 들어갈 수 있다.
+
+- 현재 auto_increment 값 확인하기
+show table status like '테이블명';
+
+- 마지막으로 생성된 번호 확인하기
+select Last_insert_id();
+
+limit
+- 조회결과를 제한하는 절
+- 몇개까지만 보여줘
+
+select * 
+from 테이블
+limit 개수;
+
+order by와 함께 많이 사용한다.
+예시- 내림차순으로 정렬해서 상위 5개만 조회해라
+
+데이터가 몇백만건 들어있는 테이블에서 limit가 없으면 위험할 수 있다.
+
+limit 시작위치
+limit 개수 offset 시작위치
+
+페이징처리할 때 사용
+select*from board
+order by board_id desc
+limit 0,10; 0개 건너뛰고 10개 조회 (1~10조회)
+
+select * 
+from board
+order by board_id desc
+limit 10,10; 10객 건너뛰고 10개 조회
+
+Sorted Program
+절차형 SQL문법
+MySQL안에서 프로그래밍처럼 SQL을 실행하기 위한 문법
+
+일반 SQL문은 한문장씩 실행이 된다.
+Sorted Proram에서는 SQL에 프로그램밍적인 요소를 집어넣을 수 있다.
+변수
+조건문
+반복문
+예외처리
+
+Sorted Program
+- MySQL 서버 안에 저장해두고 살행하는 프로그램의 단위
+Storted Procedure 여러SQL 작업을 묶어서 실행하는 프로시저(여러SQL을 묶어서 실행하는 기능)
+Storted Fution 값을 계산해서 변환하는 함수
+Trigger insert, update, delete 시 자동 실행
+Event 정해진 시간마다 자동 실행
+
+상품 주문 로직
+1. 상품 재고 조회 - select
+2. 재고가 충분한지 조회 - select
+3. 재고 차감 - update
+4. 주문 데이터 저장 - insert
+5. 결과 반환 
+
+Stored Program의 핵심 구조
+DEliMITER // 
+CREATE PROCEDURE hellow()
+BEGIN
+  SELECT 'hello MySQL Stored Program' as message;
+END//
+DEliMITER; (끝나고 세미콜론으로 끝내는 것으로 다시 되돌림)
+-- //이 있어야 명령이 끝난다고 바꿈 -> 세미콜론이 있어도 끝나지 않음
+
+*DEliMITER 
+MySQL에서 기본적으로 세미콜론을 만나면 SQL문장이  끝났다고 판단한다.
+프로시저 전체가 끝날때까지 ;로 끝난 것으로 보지 말고, //만났을 떄 
+끝난 것으로 판단해라
+
+BEGIN~END는 여러  SQL문장을 하나의 블록으로 묶는 문법
+BEGIN
+ 문장1;
+ 문장2;
+ 문장3;
+END
+
+변수를 선언하는 DECLARE
+DECLARE 변수명 자료형 DEFAULT 기본값;
+
+DECLARE v_count int default 0
+DECLARE v_name varchar(50) default '홍길동'
+
+BEGIN ~END 블록의 가장 앞 부분에 작성해 한다.
+일반 SQL문 뒤에 선언하면 오류가 난다.
+
+BEGIN
+DECLARE v_num int default 0;
+
+select '시작';
+END;
+
+변수에 값을 넣는 SET
+SET 변수명 = 값;
+
+BEGIN
+DECLARE v_num int default 0;
+SEt v_num = 100;
+
+select '시작';
+END;
+
+매개변수 in,  out, inout
+
+in은 외부에서 값을 받아오는 매개변수
+create procedure 프로시저명(in 매개변수명 타입)
+
+out은 프로시저 내부에서 만든 값을 외부로 내보내는 매개변수
+create procedure 프로시저명(out 매개변수명 타입)

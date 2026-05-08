@@ -1,0 +1,108 @@
+index 
+- 조회를 빠르개 하기 위한 목적으로 사용
+- where order by, group by에 많이 사용되는 소성애 미리 접근 위치를 기록해 놓는 다.
+- 실제 조회를 할 떄 해당 컬럼이 사용되면 index가 자동으로 사용
+- insert,update,delete에 대해서는 좀 불리하다.
+
+index 생성
+create index 인덱스명
+on 테이블(컬럼)
+
+테이블에 어떤 인덱스가 존재하는지 확인
+show index from 테이블명;
+
+인덱스 삭제 
+drop index 인덱스명 on 테이블명
+
+-----------------------------------------------------------
+Sub Query
+-SQL문 안에 SQL문이 있는 것
+- 특정 조건을 다른 테이블 조회 결과로 판단할 때
+- 평균갑, 최대값 같은 계산 결과를 기준으로 조회할 때
+- join 없이 단계적으로 데이터를 조회하고 싶을 때
+
+종류
+- 단일 행 서브쿼리 : 결과가 1개
+- 다중 행 서브쿼리 : 결과가 여러개
+  ㄴ사용하는 기호
+     in : 여러 값 중 하나
+     any : 여러 조건 중 하나라도 만족
+     all : 모든 조건 만족
+
+- 다중 컬럼 서브쿼리 : 컬럼이 여러개
+- 상관 서브쿼리 : 바깥 쿼리와 연결됨
+- from절 서브쿼리 : 가상 테이블처럼 사용
+
+Join
+- 정규화를 통해서 분리된 테이블에서 공통된 컬럼을 기준으로 연결해서 조회하는 기능 
+일반적으로 pk와 fk가 있는 테이블에 적용함
+ 
+inner join
+-  두 테이블에서  조건이 일치하는 데이터만 조회 
+
+ LEFT OUTER JOIN 
+ - 왼쪽 테이블(FROM절에 작성된 테이블)의 데이터는 전부 조회하고, 오른쪽 테이블(join된 테이블)의
+    데이터는 조건이 맞는 데이터만 조회
+- 없는 데이터 쪽은 null로 표기함
+
+ RIGHT OUTER JOIN 
+ - 오른쪽 테이블의 데이터는 전부 조회하고, 왼쪽 테이블의 데이터는 조건이 맞는 데이터만 조회
+-  LEFT와 RIGHT은 방향만 바뀐 것이기 때문에 잘 사용하지 않는다.
+
+
+cross join 
+-두 테이블에 들어 있는 데이터의 모든 조합을 만든다.
+
+핵심문법
+select 조회할 컬럼
+from 테이블
+join 연결 테이블 별칭
+on 기준테이블. 컬럼 
+on절이  두 테이블을 연결한는 기준
+
+외래키가 없어도 조인은 가능하나 무결성을 해칠 수 있기 떄문에 권장하지 않는다.
+
+컬러명 충돌
+두 테이블에 같은 이름의 컬럼이 있으면 어느 테이블에서 조회하려는 것인지 명확하게 작성해야 한다.
+
+-- 고객이름, 주문한 제품명을 left outer join을 이용하여 연결하고 조회하기
+select*from customer;
+select*from product;
+select*from orders;
+select customer_name, product_name
+from orders o
+left outer join  customer c 
+on c.customer_id = o.customer_id 
+left outer join product p
+on p.product_id = o.product_id
+where product_name = '노트북';
+-- -> 조건이 일치하지 않는 데이터는 조회가 안됨
+
+select*from customer;
+select*from product;
+select*from orders;
+select customer_name, product_name
+from orders o
+left outer join customer c
+on c.customer_id = o.customer_id 
+left outer join product p
+on p.product_id = o.product_id and product_name = '노트북';
+-- join은 유지하면서 조건맞춰서 조회
+
+-- where에 조건을 거냐 on에 조건을 거는 것에 따라 차이가 있음
+-- inner join같은 경우 어차피 매칭된 데이터를 출력하기 때문에 비슷한 경우가 많음
+
+View
+-select문의 결과를 저장해 둔 가상 테이블
+
+view를 만든다고 해서 실제로 데이터가 저장되는 것이 아님
+원본데이터가 바뀌면 view의 데이터도 바뀐다.
+
+view 안에서 view를 사용하는 것이 가능하기는 하나 성능저하가 일어날 수 있다.
+-- index와 view는 데이터 베이스 객체 -> DDL을 사용해야함(create, delete, insert, update)
+
+별칭을 해당 select문에서만 사용가능
+다른 select문에 쓸 수없다.
+view는  다른 테이블에서 사용이 가능하다.
+
+
