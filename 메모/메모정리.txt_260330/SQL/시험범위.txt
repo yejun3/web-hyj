@@ -1,0 +1,15 @@
+시험범위
+DDL 테이블 만들기
+DML
+select
+insert
+update
+delete
+
+집계함수 sum, count, min, avg, max)
+
+index 
+subquery
+join
+view
+
