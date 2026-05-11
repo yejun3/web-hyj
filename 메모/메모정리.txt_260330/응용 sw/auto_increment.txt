@@ -134,3 +134,15 @@ create procedure 프로시저명(in 매개변수명 타입)
 
 out은 프로시저 내부에서 만든 값을 외부로 내보내는 매개변수
 create procedure 프로시저명(out 매개변수명 타입)
+
+inout은 값을 받아오고, 수정한 뒤 다시 내보내는 역할
+vcreate procedure 프로시저명(inout 매개변수명 타입)
+
+if문
+if 조건 then
+         실행문;
+elseif 조건 then
+         실행문;
+else 
+        실행문;
+end if;

@@ -208,6 +208,7 @@ create procedure variable_proc()
 begin 
 	declare num int;
     set num = 100;
+    
     select num;
 end//
 delimiter ;
