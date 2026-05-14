@@ -1,15 +1,129 @@
 시험범위
-DDL 테이블 만들기
-DML
+
+
+DDL (데이터베이스 객체에대한 조작
+테이블 만들기 
+create, drop, alter 
+
+데이터베이스 객체 
+- 테이블
+-index
+- view'
+
+DML(데이터의 데한 조작)
 select
 insert
 update
 delete
 
 집계함수 sum, count, min, avg, max)
+- group by(그룹별로 집계)
+- having 그룹함수에 조건을 걸 떄 사용
 
 index 
+- 개념 : select를 빠르게 하기 위해서
+- 어디서 사용하면 좋은가 : where order by
+- 데이터가 너무 적으면 의미가 없다
+- 어떻개 만드는가
+- 어떻게 삭제하는가
+
 subquery
+- 개념 : 쿼리문 안에 쿼리문
+- select 절, from절,
+
 join
+- 개념 : 관계를 맺고 있는 두 테이블에서 조회할려고 할 떄 
+- inner join, outer join, cross join
+
 view
+- 개념: 복잡한 쿼리문의 결과를 저장하는 가상의 테이블
+---------------------------------------------------------------------------------시험범위
+
+case문 
+- 조건에 따라 다른 값을 반환하는 문법
+case
+       when 조건 then 결과1
+       when 조건 then 결과2
+       when 조건 then 결과3 
+       else  기본결과
+end
+
+case 컬럼명
+       when 값1 then 결과1
+       when 값2 then 결과2
+       when 값3 then 결과3 
+       else  기본결과
+end
+
+- case문은 select절에서 많이 사용된다.
+-order by절에서도 사용할 수 있다. -> 비즈니스 로직 기준 정렬(업무 우선순위, 처리순서, 긴급도)
+- group by절에서도 사용할 수 있다.
+- update쪽에서도 조건에 맞게 데이터를 수정할 수 있는 장점
+
+반복문
+-같은 작업을 여러번 반복 실행할 떄
+- 프로시저 안에서만 작성가능
+
+while문
+begin
+ 변수선언
+ while 조건 do
+   반복실행할 문장
+   set으로 변수값 변경
+ end while
+end
+
+repeat : do-while과 사용법이 같다
+repeat
+    반복 실행할 명령
+ until 조건 -> 조건이 참이되면 종료
+end repeat
+
+loop : 무한 루프 기반 ,종료조건을 명시해야 한다.
+- 라벨을 달아야한다.
+-
+라벨: loop
+  반복 실행할 문장 
+   if 조건 then
+    leave 라벨;
+   end if;
+ end loop;
+
+interate -> continue
+- 현재 반복을 중단하고 다음 반복으로 이동하는 명령어
+
+라벨 : loop
+         if 조건 then
+                 iterate 라벨
+         end if
+         처리문
+ end loop
+
+MySQL의 예외처리
+Handler
+-Procedure 안에서 에러,경고 조회결과 없음 같은 상황을 처리하는 예외처리 문법
+- 프로시저 실행중 문제가 생겼을때 프로시저가 바로 중단되지 않도록 처리방법을 정해두는 문법
+
+에러처리 : 중복된 PK를 INSERT한 경우
+조회결과 없음 처리 : select..into의 결과가 없는 경우
+커서종료 처리 : 더 이상 읽을 데이터가 없는 경우
+ㄴ CURSOR : SELECT 결과를 한 줄씩 꺼재서 처리하는 기능
+경고 처리 : 데이터 잘림, 형 변환 경고 등
+
+기본문법
+declare 핸들러타입 handler for 예외
+begin
+예외처리
+end;
+
+핸들러 타입 종류
+continue : 에러 처리 후 다음 문장 계속 실행
+exit : 에러 처리 후 begin -end 블록 종료
+
+예외 종류
+SQLEXCEPTION : 대부분의 SQL 에러
+SQLWARNING : SQL 경고
+NOT FOUND : 조회결과 없음
+MySQL 에러코드 : 1062 (중복키 에러)
+
 
