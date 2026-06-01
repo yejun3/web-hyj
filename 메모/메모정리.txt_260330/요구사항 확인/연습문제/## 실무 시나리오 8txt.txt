@@ -365,4 +365,6 @@ RrsultSet rs = pstmt.executeOuery();
 개발자가 실수로 RseultSet을 닫지 않았다.
 문제 
 RseultSet을 close해야하는 이유 
-: 메모리 누수를 막기 위해서이다.
+: 메모리 누수를 막기 위해서이다
+
+.

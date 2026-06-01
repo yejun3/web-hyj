@@ -1,0 +1,139 @@
+SQL 버퍼 (SQL Buffer)
+최근 입력한 SQL 문장 또는 PL/SQL 블록을 임시 저장하는 메모리 공간
+SQL*Plus 종료 시 버퍼 내용은 사라짐
+1. 파일 명령어
+SAVE
+
+현재 SQL 버퍼의 내용을 파일로 저장
+
+SQL> SELECT * FROM MEMBER;
+SQL> SAVE member.sql
+Created file member.sql
+GET
+
+저장된 SQL 파일을 버퍼로 불러오기
+
+SQL> GET member.sql
+
+결과
+
+SELECT * FROM MEMBER;
+SPOOL
+
+실행 결과를 파일에 저장
+
+SQL> SPOOL result.txt
+
+SQL> SELECT * FROM MEMBER;
+
+SQL> SPOOL OFF
+
+생성된 result.txt
+
+MEMBER_ID MEMBER_NAME
+--------- -----------
+1         홍길동
+2         김철수
+
+2 rows selected.
+2. 편집 명령어
+L (LIST)
+
+현재 SQL 버퍼 내용 확인
+
+SQL> L
+
+결과
+
+1* SELECT *
+2  FROM MEMBER
+A (APPEND)
+
+현재 줄의 끝에 문자열 추가
+
+현재 버퍼
+
+SELECT *
+FROM MEMBER
+SQL> 2
+2* FROM MEMBER
+
+SQL> A WHERE MEMBER_ID = 1
+
+결과
+
+SELECT *
+FROM MEMBER WHERE MEMBER_ID = 1
+C (CHANGE)
+
+문자열 변경
+
+현재 버퍼
+
+SELECT NAME FROM MEMBER;
+SQL> C/NAME/MEMBER_NAME
+
+결과
+
+SELECT MEMBER_NAME FROM MEMBER;
+DEL
+
+현재 줄 삭제
+
+현재 버퍼
+
+SELECT *
+FROM MEMBER
+WHERE MEMBER_ID = 1;
+
+확인
+
+SQL> L
+
+1* SELECT *
+2  FROM MEMBER
+3  WHERE MEMBER_ID = 1
+
+3번 줄 선택
+
+SQL> 3
+3* WHERE MEMBER_ID = 1
+
+삭제
+
+SQL> DEL
+
+결과
+
+SELECT *
+FROM MEMBER
+I (INSERT)
+
+현재 줄 다음에 새로운 줄 삽입
+
+현재 버퍼
+
+SELECT *
+FROM MEMBER
+
+2번 줄 선택
+
+SQL> 2
+2* FROM MEMBER
+
+삽입 모드 진입
+
+SQL> I
+
+입력
+
+3 WHERE MEMBER_ID = 1
+4 .
+
+결과
+
+SELECT *
+FROM MEMBER
+WHERE MEMBER_ID = 1
+
+※ . 은 INSERT 모드를 종료하는 기호

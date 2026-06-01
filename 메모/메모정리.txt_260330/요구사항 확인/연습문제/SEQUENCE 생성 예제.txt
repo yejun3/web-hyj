@@ -1,0 +1,45 @@
+SEQUENCE 생성 예제
+
+CREATE SEQUENCE seq_member
+START WITH 1
+INCREMENT BY 1;
+
+오라클 시퀀스 객체를 생성
+
+INSERT INTO members(member_id, member_name)
+VALUES(seq_member.NEXTVAL, '홍길동');
+데이터 추가 시 .nextVAL을 사용해서 적용시킨다.
+
+----------------------------------------------------------
+작원단위
+1 내 잔고 차감
+2. 상대방 잔고 증가
+
+실행 
+결과
+
+데이터베이스에 바로 반영하는게 아님(임시저장)
+
+commit을 통해 데이터베이스에 반영
+
+쿼리문 실행결과가 내가 원하는 값이 아님
+ROLLBACK 통해 되돌린다,
+ 
+IN OUT Parameter 예제
+CREATE OR REPLACE PROCEDURE increase_number(
+    p_num IN OUT NUMBER
+)
+IS
+BEGIN
+    p_num := p_num + 1;
+END;
+/
+VARIABLE v_num NUMBER; -- 바인드 변수 생성
+
+EXEC :v_num := 10; -- 바인드 변수에 값을 대입
+
+EXEC increase_number(:v_num);
+
+PRINT v_num;
+
+
