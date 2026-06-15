@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title> 
+</head>
+<body> 
+        <!--  사이트의 도입부, 머릿 부분에 사용이 되고 사이트의 로고나 
+      제목 등을 기술할 때 사용한다.
+      안에 부수적인 태그들이 추가적으로 들어갈 수 있다.
+      검색창을 넣거나 사이트 메뉴를 넣기도 한다. --> 
+    <header>
+        <!-- 내비게이션 표현을 위한 태그로서 동일한 사이트 안의 다른 문서나 
+         다른 사이트의 문서로 연결하는 링크들의 모음을 가지고 있다 -->
+    <nav>
+      <a href="#about">소개</a>
+      <a href="#posts">글 목록</a>
+      <a href="#contact">연락처</a>
+    </nav>
+    </header>
+    <!-- 해당 콘텐츠의 메인 콘텐츠를 나타낼 때 사용하며 
+     반드시 한 번만 사용되어냐 한다. -->
+    <main>
+        <!-- 하나의 주제가 묶이는 태그 -->
+         <section id = "about">
+            <h2> 이 블록는 무엇을 다루는가?</h2>
+            <p>웹 개발 입문자를 위한 초간단 학습 노트를 공유한다.</p>
+         </section>
+         <section id = "posts">
+            <h2>최근 글</h2>
+            <article>
+                <h3>HTML5 기본 구조 정복하기</h3>
+                <p>시작은 가볍지만 중요한 개념을 알았다.</p>
+                <time datetime="2025-10-21">2025년 10월 21일</time>
+            </article>
+            <!-- 보조 정보(광고, 참고 링크 등) -->
+            <article>
+                <h2>참고 링크</h2>
+                <ul>
+                    <li><a href="https://developer.mozilla.org/ko/">MDN 문서</a></li>
+                </ul>
+            </article>
+         </section>
+    </main>
+    <footer>
+        <small>&copy; 2025 코딩 새싹이다.</small>
+    </footer>
+</body>
+</html>
