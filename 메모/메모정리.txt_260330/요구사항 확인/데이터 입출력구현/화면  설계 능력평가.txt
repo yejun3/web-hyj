@@ -1,0 +1,85 @@
+화면  설계 능력평가
+
+HTML -> 간단한 프로토타입
+
+HTML은 프로그래밍 언어가 아니라 문서언어
+-> 반복문, 조건문, 변수 설정 등이 없음
+
+## HTML5 기본 문서 구조
+
+```bash
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <title>나의 첫 웹페이지</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="HTML5 기초 연습 페이지">
+</head>
+<body>
+  <h1>안녕하세요</h1>
+  <p>이 문서는 HTML5 기본 구조를 연습하기 위한 샘플이다</p>
+</body>
+</html>
+```
+
+<태그>안에 있는 내용은 달라지지 않음
+
+<!DOCTYPE html> HTML5 문서임을 선언
+
+<head>~</head> -  meta정보가 들어가는 시작과 끝 헤더 영역
+
+<body>~</body> - HTML문서에서 실질적으로 보이는 영역을 정의하는 구간
+예) 이미지, 본문내용, 링크, 테이블, 제목 등등
+
+HTML 문법
+  <시작태그 속성1="속성값" ... 속성n="속성값">내용</종료태그>
+시작태그와 종료태그는 같아야한다. ex) head라 썻으면 head를 적음
+
+<title color="red"> </title> 
+        ㄴ속성   ㄴ 속성값
+
+
+DOM 개념
+화면을 만들기 전 정리해둔 구성표 (트리구조)
+루트요소가 최상위 요소
+
+
+## 문서 작성 규칙
+
+- 문서의 첫 줄은 항상 `<!DOCTYPE html>` 이다.
+- `<html>` 안에는 `<head>` 와 `<body>` 가 반드시 들어간다.
+- `<head>` 에는 보이지 않는 정보(문서 제목, 설명, 인코딩 설정 등)를 쓴다.
+- `<body>` 에는 실제 화면에 보이는 콘텐츠를 작성한다.
+- 들여쓰기와 줄바꿈으로 구조를 보기 좋게 정리한다.
+
+
+# HTML의 태그들
+## <head> 태그 정리
+
+- 웹 문서의 제목(<title>)
+- CSS의 링크
+- 파비콘(favicon)(**웹사이트를 대표하는 작은 아이콘**)
+- 다른 meta 데이터(**설명, 작성자, 중요한 키워드와 같은 HTML에 대한 내용**)를 포함한다.
+- 그 외 script파일을 불러오거나 웹폰트 파일을 불러오는 link
+
+### **<meta>**
+
+- html문서에 대한 정보
+- 문자 인코딩 및 문서 키워드, 요약 등
+
+### **<title>**
+
+- <title>안의 내용이 웹브라우저의 제목 표시줄에 표시된다
+- 페이지를 방문하는 방문자나 검색엔진은 제목 표시줄의 제목을 보고 내용을 예측한다.
+
+### **<link>**
+
+- 외부파일을 연결할 때 사용한다.
+
+```html
+<link href="/style.css" rel="stylesheet" type="text/css" />
+```                ㄴ주소           ㄴ연결할 파일       ㄴ 파일 유형
+- href : 파일의 위치
+- rel : 연결할 파일이 stylesheet라는 의미
+- type : 스타일시트 코드가 텍스트 파일로된 css유형이라는 의미
