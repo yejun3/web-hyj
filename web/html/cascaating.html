@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #special{color: aqua;}
+
+        .text{color:#0000ff;}
+
+        /* ! important
+        CSS 우선순위를 가장 높게 만드는 키워드 
+        남용 시 유지보수가 어려워진다.*/
+
+        p{color:red !important;}
+
+    </style>
+</head>
+<body>
+    <p class="text" id = "special">이 문장은 어떤 색으로 표시될까요?</p>
+</body>
+</html>

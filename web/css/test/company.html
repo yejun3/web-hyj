@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+
+        .body{
+            font-family: sans-serif;
+            background-color: antiquewhite;
+            color: black;
+        }
+
+        .company{
+            display: grid;
+            grid-template-columns: 180px 1fr 220px;
+            gap:15px;
+            margin: 30px auto;
+
+            grid-template-areas: 
+            "header header header"
+            "nav main aside"
+            "footer footer footer";
+        }
+
+        header{
+            background-color: black;
+            grid-area: header;
+            color:white;
+            padding: 20px;
+        }
+
+        nav{
+            background-color: white;
+            border: 1px solid #ddd;
+            grid-area: nav;
+        }
+
+        nav p{
+            padding: 10px;
+            margin: 10px;
+            background-color: bisque;
+            border: 1px solid whitesmoke;
+            border-radius: 8px;
+        }
+
+        main{
+            background-color: white;
+            padding: 10px;
+            border: 1px solid #ddd;
+            grid-area: main;
+        }
+        
+        aside{
+            grid-area : aside;
+            background-color: lightyellow;
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+
+        footer{
+            grid-area: footer;
+            background-color: white;
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+
+
+
+
+    </style>
+</head>
+<body>
+    <div class="company">
+        <header>
+        <h1>ABC 소프트웨어</h1>
+        <p>기업용 웹 시스템을 개발하는 IT 회사입니다.</p>
+        </header>
+
+        <nav>
+            <p>회사소개</p>
+            <p>서비스</p>
+            <p>채용정보</p>
+            <p>문의하기</p>
+        </nav>
+
+        <main>
+            <h2>회사소개</h2>
+            <p>ABC 소프웨어는 학원,병원,쇼핑몰을 위한 웹 기반 관리 시스템을 개발합니다
+                사용자가 쉽고 빠르게 업무를 처리할 수 있는 서비스를 제공합니다.
+            </p>
+            <h2>주요서비스</h2>
+            <p>예약 관리, 회원 관리, 결제 관리. 통계 대시보드 기능을 제공합니다.</p>
+        </main>
+
+        <aside>
+            <h2>고객센터</h2>
+            <p>전화: 02-1234-5678</p>
+            <p>운영시간: 09:00 ~ 18:00</p>
+        </aside>
+
+        <footer>
+            <p>&copy; Copylight 2026 ABC SoftWare</p>
+        </footer>
+
+    </div>
+</body>
+</html>

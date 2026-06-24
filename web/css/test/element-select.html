@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* 문제 1번
+        메뉴 안에 링크만 선택자 작성하기 */
+        .menu a{color:aqua}
+
+        /* 문제 2번
+        첫 번째 li만 선택하는 선택자 작성하기 */
+        .list li:first-child{color:pink}
+
+        /*문제 3번
+         짝수 번째 li만 선택하는 선택자 작성하기 */
+        .menu li:nth-child(even){color: green; }
+
+        /* 문제 4번
+        typedl text인 input만 선택하는 선택자 작성하기 */
+        input[type="text"]{color: red;}
+
+        /* 문제5번
+        "중요 공지"만 선택하는 선택자 작성하기 */
+        .board .post.notice p:first-child{color: red;}
+
+        /* 문제 6번
+        바나나만 선택하는 선택자 작성하기 */
+        .box.active li:nth-child(2){color:yellow}
+
+        /* 문제 7번
+        공지 2번 링크만 선택하는 선택자 작성하기 */
+        .board li:nth-child(2) a{color:yellowgreen}
+
+        /* 문제 8번 
+        게시판 링크에 마우스를 올렸을 때 적용되는 선택자 작성하기 */
+        .menu div a:hover{color: purple}
+
+        /* 문제 9번
+        김철수만 작성하는 선택자 작성하기 */
+        .member tr.vip td{color:gold}
+
+        /* 문제 10번
+        사용자 관리에만 스타일이 적용되도록 하는 선택자 작성하기 */
+        .dashboard .card li:nth-child(3) a{color:brown}
+
+    </style>
+</head>
+<body>
+    <h1>문제 1번</h1>
+    <nav class="menu">
+        <a href="#">홈</a>
+        <a href="#">게시판</a>
+    </nav>
+
+    <a href="#">일반 링크</a>
+    
+    <hr>
+
+    <ul class="list">
+      <li>사과</li>
+      <li>바나나</li>
+      <li>포도</li>
+    </ul>
+    <hr>
+    <ul class="menu">
+     <li>홈</li>
+     <li>소개</li>
+     <li>게시판</li>
+     <li>문의</li>
+    </ul>
+
+    <input type="text">
+    <input type="password">
+    <input type="email">
+
+    <hr>
+
+    <div class="board">
+
+    <div class="post notice">
+        <p>중요 공지</p>
+        <p>내용</p>
+    </div>
+
+    <div class="post">
+        <p>일반 글</p>
+    </div>
+
+    </div>  
+
+    <div class="box active">
+
+    <ul>
+        <li>사과</li>
+        <li>바나나</li>
+        <li>포도</li>
+    </ul>
+
+    </div>
+
+    <div class="board">
+
+    <ul>
+
+        <li>
+            <a href="#">공지1</a>
+        </li>
+
+        <li>
+            <a href="#">공지2</a>
+        </li>
+
+        <li>
+            <a href="#">공지3</a>
+        </li>
+
+    </ul>
+
+    </div>
+
+    <hr>
+
+    <nav class="menu">
+
+    <a href="#">홈</a>
+
+    <div>
+
+        <a href="#">게시판</a>
+
+    </div>
+
+    <a href="#">문의</a>
+
+   </nav>
+
+   <hr>
+   
+   <table class="member">
+
+    <tr>
+        <td>홍길동</td>
+    </tr>
+
+    <tr class="vip">
+        <td>김철수</td>
+    </tr>
+
+    <tr>
+        <td>이영희</td>
+    </tr>
+
+    </table>
+
+    <hr>
+    <div class="dashboard">
+
+    <div class="card">
+
+        <ul>
+
+            <li>
+                <a href="#">대시보드</a>
+            </li>
+
+            <li class="disabled">
+                <a href="#">통계</a>
+            </li>
+
+            <li>
+                <a href="#">사용자 관리</a>
+            </li>
+
+            <li>
+                <a href="#">설정</a>
+            </li>
+
+        </ul>
+
+    </div>
+
+</div>
+
+</body>
+</html>

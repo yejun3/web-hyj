@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            background : #eef1f5;
+        }
+
+        .dashboard{
+            max-width : 800px;
+            margin : 0 auto;
+        }
+
+        .stats{
+            display : grid;
+            grid-template-columns: 1fr 1fr;
+            gap : 20px;
+        }
+
+        .stat-card{
+            background-color: white;
+            border : 1px solid #ddd;
+            border-radius : 12px;
+            padding : 25px;
+        }
+
+        .stat-card h2{
+            font-size : 18px;
+            color : #555;
+        }
+
+        .stat-card strong{
+            font-size : 32px;
+            margin-top : 15px;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <h1>관리자 대시보드</h1>
+
+        <div class="stats">
+            <dlv class="stat-card">
+                <h2>전체 수강생</h2>
+                <strong>128명</strong>
+            </dlv>
+            <dlv class="stat-card">
+                <h2>오늘 출석율</h2>
+                <strong>92명</strong>
+            </dlv>
+            <dlv class="stat-card">
+                <h2>미납 수강생</h2>
+                <strong>7명</strong>
+            </dlv>
+            <dlv class="stat-card">
+                <h2>상담예약</h2>
+                <strong>12건</strong>
+            </dlv>
+        </div>
+    </div>
+</body>
+</html>

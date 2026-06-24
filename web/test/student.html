@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .전체화면 {font-family: Arial, sans-serif;
+        background-color:#f5f5f5;}
+        h1 {color:navy; font:30px;}
+        .수강생등록영역 {border:2px solid black;}
+        .목록 {border:2px solid black;}
+        .셀 {border:1px solid gray;}
+        #표제목 {background-color:#dddddd;}
+    </style>
+</head>
+<body>
+<div class = "전체화면">
+    
+    <h1>수강생 관리화면</h1>
+
+    <div class="수강생등록영역">
+    <h2>수강생 등록</h2>
+    <label for="name">이름</label>
+    <input id ="name" type="text" placeholder="이름을 입력하세요">
+    <label>과정 선택
+    <select 과정선택>
+    <option value ="과정선택">HTML 기초</option>
+    </label>
+    </select>
+    <button>등록</button>
+  </div>
+
+    <h2>수강생 목록</h2>
+    <table class = 목록 border ="1">
+        <tr id ="표제목">
+            <th>번호</th>
+            <th>이름</th>
+            <th>과정명</th>
+            <th>출석상태</th>
+        </tr>
+
+        <tr class = "셀">
+            <td>1</td>
+            <td>김학생</td>
+            <td>HTML 기초</td>
+            <td>출석</td>
+        
+        </tr>
+        
+        <tr class = "셀">
+            <td>2</td>
+            <td>이학생</td>
+            <td>CSS 기초</td>
+            <td>지각</td>
+        </tr>
+        
+        <tr class = "셀">
+            <td>3</td>
+            <td>박학생</td>
+            <td>화면 설계</td>
+            <td>결석</td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
