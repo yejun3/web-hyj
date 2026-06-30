@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        // for(초기식;조건식;증감식;){
+        //
+        //조건식이 참일 떄 반복하고자 하는 명령
+        //
+        //}
+
+        for(let i=1; i<7; i++){
+           document.write('<h',i,'>','자바스크립트','</h',i,'>');
+        }
+
+        document.write('<hr>')
+
+        let dan = 8;
+        for(let i=1; i<10; i++){
+            document.write(dan, " x ",i," = ",dan*i, '<br>');
+        }
+        
+        document.write('<hr>')
+        
+        document.write('<ul>')
+        for(let i=1; i<4; i++){
+            document.write('<li>안녕</li>')
+        }
+        document.write('</ul>')
+
+
+        function cal(){
+            let num = Number(document.getElementById("number").value);
+            let sum=0;
+            for(let i=1; i<= num; i++){
+               sum +=i;
+            }
+            document.getElementById('result').innerText=sum;
+        }
+
+
+
+        // 헤더 태그를 이용해서 화면에 출력하기
+    </script>
+</head>
+<body>
+    <hr>
+    <h3>1부터 입력한 수까지의 합</h3>
+    <!-- 숫자를 입력받는다. -->
+    <!-- 계산 버튼을 만든다.-->
+    <!-- 1부터 입력한 숫자까지 더한 값을 출력 -->
+
+    <label>
+        <input type="number" id="number">
+    </label>
+    <button onclick="cal()">계산하기</button>
+    <br><br>
+    <div id="result"></div>
+
+
+</body>
+</html>

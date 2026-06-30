@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .box{
+            width: 200px;
+            height : 100px;
+            background-color: tomato;
+            color:white;
+            font-size: 24px;
+            text-align: center;
+            line-height: 100px;
+            margin-bottom: 20px;
+        }
+
+        .box1{
+            opacity: 1;
+        }
+
+        
+        .box2{
+            opacity: 0.5;
+        }
+        
+        /* 보이지는 않지만 공간은 그대로 차지한다. */
+        .box3{
+            opacity: 0;
+        }
+
+        .box4{
+            opacity: 1;
+        }
+
+        .card{
+            border: 1px solid black;
+            width: 200px;
+            opacity: 0.3;
+            transition: opacity 0.5s;
+        }
+        
+     /* 카드에 마우스를 올렸을 때 투명도를 1로 하기 
+     투명도가 0.5초 동안 자연스럽게 변하도록 애니메이션 주기*/
+     .card:hover{
+        opacity: 1
+     }
+     
+
+
+    </style>
+</head>
+<body>
+    <div class="box box1">1</div>
+    <div class="box box2">0.5</div>
+    <div class="box box3">0</div>
+    <div class="box box4"></div>
+
+    <hr>
+    <!-- 자식요소까지 같이 투명해진다. -->
+     <div class="card">
+        <h2>제목</h2>
+        <p>내용</p>
+     </div>
+
+</body>
+</html>

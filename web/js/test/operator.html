@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+
+    function calc(){
+        // 공 25개를 박스에 4개씩 담을 떄 필요한 박스 갯수
+
+        // input 태그를 선택해서 변수에 담음
+        let input= document.getElementById('count');
+
+        // input 태그에 들어가있는 값 뽑기
+        // 뽑아온 값은 무조건 문자열
+        let count = Number(input.value);
+
+        let box = count % 4 == 0 ? count/4 : (count/4) + 1;
+
+        // 연산된 값을 넣어주기 위한 태그를 선택
+        let span = document.getElementById('box');
+
+        //innerHTML
+        //태그를 포함해서 문자열을 쓰면 적용이 된다.
+
+        //innerText
+        //태그를 써도 그냥 문자열로 그대로 출력이 된다.
+        
+        span.innerText = box;
+    }
+
+    function calc2(){
+        let input2= document.getElementById('age');
+
+        let input3= document.getElementById('price');
+
+        let input4 = document.getElementById('count2');
+
+        let age = Number(input2.value);
+        let ticket_price = Number(input3.value);
+        let ticket_count = Number(input4.value);
+
+        let price = (age>20) ? ticket_price * ticket_count : (ticket_price*ticket_count) * 0.8;
+
+        document.getElementById('total').innerText = price;
+    }
+
+    function checkDelivery(){
+        //주문금액 불러오기
+        let orderprice = Number(document.getElementById('orderprice').value);
+
+        //선택된 라디오버튼 불러오기
+        let isVIP = document.querySelector("input[name='VIP']:checked").value ==="true";
+
+        // 무료배송 여부
+        let isFree = (orderPrice>=30000 || isVIP);
+
+        alert()
+
+        document.getElementById("result").innerText = isFree
+    }
+
+    </script>
+</head>
+<body>
+    <h1>박스 갯수 구하기</h1>
+    <label>
+        공의 갯수
+        <input type="text" id="count">
+    </label>
+
+    <!-- 버튼을 누르는 이벤트 -->
+    <button onclick="calc()">계산하기</button>
+    <br>
+    <label>
+        필요한 박스의 갯수:
+        <span id="box"></span>
+    </label>
+
+    <hr>
+
+    <h1>티켓 가격 계산기</h1>
+        <input type="text" id="age"  placeholder="나이 입력">
+    <br><br>
+        <input type="text" id="price" placeholder="티켓 가격 입력">
+    <br><br>
+        <input type="text" id="count2" placeholder="티켓 수 입력">
+    <br><br>
+    <button onclick="calc2()">티켓 가격 조회</button>
+    <br><br>
+    <label>
+        티켓 가격: 
+        <span id="total"></span>
+    </label>
+
+    <hr> 
+
+    <h1>배송비 계산하기</h1>
+    <!-- 주문금액이 30000이상이거나 VIP회원이라며 무료배송 -->
+    <!-- 주문금액 입력 -->
+    <label>
+        주문금액: 
+        <input type="number" id="orderPrice">
+    </label>
+    <br>
+    <!-- vip 여부는 체크박스로 -->
+     <label>
+        <input type="radio" name="VIP" value="true" checked>
+        VIP
+     </label>
+    <label>
+        <input type="radio" name="VIP" value="false" >
+        일반회원
+    </label>
+    <br><br>
+    <button onclick="checkDelivery()">확인</button>
+    <div id="result"></div>
+</body>
+</html>

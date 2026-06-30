@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            font-family: sans-serif;
+            background-color: #f0f2f5;
+            text-align: center;
+            margin: 0;
+            padding: 40px;
+        }
+
+        .box{
+            width: 100px;
+            height: 100px;
+            background-color: blueviolet;
+            border-radius: 8px;
+            margin: 40px auto;
+            /* 상태변화가 일어나지 않은 쪽에 준다. */
+            transition : 
+            width 0.5s ease 0.3s, 
+            background-color 0.5s ease 0.3s;
+
+        }
+        /* transition : property duration timing-function delay
+        property : 어떤 속성을 변화시킬지 (width,background...)
+        deration: 몇 초 동안 변화할지 0.3s
+        timig-function :변화 속도 곡선
+        ㄴ ease : 천천히 시작 -> 빨라졌다가 -> 천천히 끝난다.
+        ㄴ linear : 일정한 속도
+        ㄴ ease-in : 천천히 시작
+        ㄴ ease-out : 천천히 끝남
+        ㄴ ease-in-out : 천천히 시작하고 천천히 끝남
+        delay : 몇 초 뒤 시작할 지
+        */
+
+        /* transition이 잘되는 속성
+        숫자로 중간값을 계산할 수 있는 속성
+        width, heghit, background-color, color, opacity
+        transform, box-shadow, border-radius
+
+        잘 안되는 속성
+        중간값을 계산할  수 없는 속성 
+        display*/
+
+        
+
+        .box:hover{
+            width: 200px;
+            background-color: tomato;
+        }
+        
+        /* btn 클래스 */
+
+        .btn{
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            background-color: royalblue;
+            color:white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 
+            background-color 0.3s ease;
+            transform: 0.3s ease;
+        }
+
+        .btn:hover{
+            background-color: tomato;
+            transform : translateY(-5px) 
+        }
+
+        
+    </style>
+</head>
+<body>
+    <h1>CSS Transition</h1>
+    <p>마우스를 박스 위에 올려보세요</p>
+    <div class="box"></div>
+
+    <hr>
+    <button class="btn">버튼</button>
+</body>
+</html>

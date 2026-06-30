@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* 공통 스타일 */
+        *{
+            box-sizing: border-box;
+        }
+
+        body{
+            margin: 0;
+            display: flex;
+            background-color: #ddd;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* aside 영역 스타일 */
+        .sidebar{
+            border: 1px solid black;
+            width: 240px;
+            background-color: #263238;
+            color: white;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .logo{
+            font-size: 26px;
+            color: #ffcc80;
+        }
+
+        .menu{
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .menu a{
+            transition: all 0.3s ease;
+        }
+
+        .menu a:hover{
+            background-color: #37474f;
+            transform: translateX(8px);
+        }
+
+        /* board-container 영역 */
+
+        .content{
+            flex:1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            min-height: 100vh;
+            padding: 30px;
+        }
+
+        /* 헤더 영역 */
+        header{
+            background-color: white;
+            border-radius: 18px;
+            padding: 24px 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+        }
+
+        header h1{
+            animation: fadeup 0.9s ease;
+        }
+        @keyframes fadeup{
+            from{
+                opacity: 0; transform: translateY(30px);
+            }
+            to{
+                opacity: 1; transform: translateY(0);
+            }        
+        }
+
+        /* 현황상태 영역 */
+        .current-data{
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 24px;
+        }
+
+        .current-data .data-box{
+            background-color: white;
+            border-radius: 18px;
+            padding: 24px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            transition:  
+            transform 0.3s ease,
+            box-shadow 0.3s,
+            appear 0.3s;
+        }
+
+        .data-box span{
+            color: #ef6c00;
+            font-size: 38px;    
+        }
+
+        .data-box:hover{
+            transform: translateY(-10px);
+            box-shadow: 0 16px 28px rgba(0,0,0,0.15);
+        }
+
+        @keyframes appear {
+            from{
+                opacity: 0; transform: scale(0.9);
+            }
+            to{
+              opacity: 1; transform: scale(1);  
+            }   
+        }
+
+        /* 테이블 영역 */
+        .status-table{
+            display: flex;
+            flex-direction: column;
+            border: 1px solid black;
+            background-color: white;
+            border-radius: 18px;
+            padding: 28px;
+            margin-bottom: 30px;    
+        }
+
+        table{
+            width: 100%;
+            height: 54px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th{
+            background-color: #eceff1;
+            transition: 0.3s;
+        }
+
+        th:hover{
+            background-color: #fff3e0;
+        }
+
+        /* 알림 박스 영역 */
+        .notice-box-group{
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap:24px;
+
+        }
+
+        .notice-box{
+            background-color: white;
+            border-radius: 18px;
+            padding: 28px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+            transition: 0.3s;
+        }
+
+        .notice-box:hover{
+            transform: scale(1.03);
+        }
+
+        .notice-box.resque{
+            transition: move 0.3s;
+        }
+
+        @keyframes move {
+            
+        }
+
+
+
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <span class="logo">Happy Paws</span> 
+        <div class="menu">
+            <a href="#">대시보드</a>
+            <a href="#">입양 관리</a>
+            <a href="#">보호 동물</a>
+            <a href="#">봉사 일정</a>
+            <a href="#">후원 현황</a>
+        </div>
+    </aside>
+
+    <section class="content">
+        
+        <header>
+            <h1>입양 현황 대시보드</h1>
+            <p>오늘의  보호소 운영 현황을 한눈에 확인합니다.</p>
+        </header>
+
+        <section class="current-data">
+            
+            <article class="data-box">
+                <h3>보호중</h3>
+                <span>28</span>
+            </article>
+
+            <article class="data-box">
+                <h3> 입양완료</h3>
+                <span>12</span>
+            </article>
+            
+            <article class="data-box">
+                <h3>치료중</h3>
+                <span>5</span>
+            </article>
+            
+            <article class="data-box">
+                <h3>봉사신청</h3>
+                <span>18</span>
+            </article>
+        </section>
+
+        <section class="status-table">
+            <h2>보호동물 상태표</h2>
+             <table border="1">
+                <thead>
+                    <tr>
+                        <th>이름</th>
+                        <th>종류</th>
+                        <th>상태</th>
+                        <th>담당자</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>초코</td>
+                        <td>강아지</td>
+                        <td>입양 대기</td>
+                        <td>김보호</td>
+                    </tr>
+
+                    <tr>
+                        <td>나비</td>
+                        <td>고양이</td>
+                        <td>치료증</td>
+                        <td>이관리</td>
+                    </tr>
+
+                    <tr>
+                        <td>두부</td>
+                        <td>강아지</td>
+                        <td>상담 예약</td>
+                        <td>백업양</td>
+                    </tr>
+
+                    <tr>
+                        <td>콩이</td>
+                        <td>고양이</td>
+                        <td>입양 완료</td>
+                        <td>최상담</td>
+                    </tr>   
+                </tbody>
+             </table>
+        </section>
+
+        <section= class="notice-box-group">
+            <div class="notice-box resque">
+                <h2>긴급 구조 알림</h2>
+                 <ul>
+                    <li>오늘 구조 요건 3건</li>
+                    <li>치료가 필요한 동물 2마리 확인</li>
+                    <li>임시 보호처 1곳 필요</li>
+                 </ul>
+            </div>
+
+            <div class="notice-box">
+                <h2>봉사 일정</h2>
+                 <ul>
+                    <li>오전 10:00 산책봉사</li>
+                    <li>오후 02:00 보호소 청소</li>
+                    <li>오후 05:00 사료 정리</li>
+                 </ul>
+            </div>
+        </section>
+
+        <footer>
+            <p>&copy;Happy Paws Animal Dashboard</p>
+        </footer>
+
+    </section>
+    
+</body>
+</html>
