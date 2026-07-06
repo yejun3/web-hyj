@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        //HTML 요소릐 선택
+        // 자바스크립트로 HTML 요소를 제어하려면, 제어하고자 하는 요소를 선택을 해야한다.
+        // document 객체는 요소를 선택할 수 있는 다양한 메서드를 가지고 있다.
+
+        // id를 이용한 선택
+        // getElemntById("아이디값");
+
+        // 태그명을 이용한 선택
+        // getElemntsByTagName()
+
+        // 클래스명을 이용한 선택
+        // getElementsByClassName()
+
+        //CSS 선택자를 이용한 선택
+        //querySelector();
+        //querySelectorAll();
+
+
+    </script>
+</head>
+<body>
+    <h1 id="title">안녕하세요</h1>
+    <p class="menu">홈</p>
+    <p class="menu">상품</p>
+    <p class="menu">문의</p>
+
+    <h2 class="title">제목 1</h2>
+    <h2 class="title">제목 2</h2>
+    <script>
+        let title = document.getElementById("title");
+        console.log(title);
+        title.innerText="반갑습니다."
+
+        // 클래스명을 이용한 선택
+        let menus = document.getElementsByClassName("menu");
+        console.log(menus);
+
+        menus[0].innerText = "Home";
+
+        // 태그명을 이용한 선택
+        let tags = document.getElementsByTagName("p");
+        console.log(tags);
+        // CSS 선택자를 이용한 선택
+        //첫 번쨰 요소만 선택
+        title = document.querySelector(".title");
+
+    </script>
+</body>
+</html>

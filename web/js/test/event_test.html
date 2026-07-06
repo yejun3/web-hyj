@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<select id="fruit">
+  <option>사과</option>
+  <option>바나나</option>
+  <option>포도</option>
+</select>
+
+<hr>
+<div id="result2"></div>
+
+<hr>
+<input id="userInput" type="text" placeholder="아이디 입력">
+
+<script>
+  const fruitSelect = document.getElementById("fruit");
+  const resultDiv = document.getElementById("result2");
+
+  fruitSelect.addEventListener("change", function() {
+    resultDiv.innerText = "선택한 과일: " + fruitSelect.value;
+  });
+
+
+// focus /blur
+//  //input 태그에 포커스가 잡히면 테두리를 노란색으로 빠져나오면 테두리를 파란색으로 만들기
+  const userInput = document.getElementById("userInput");
+
+  userInput.addEventListener("focus", function() {
+    userInput.style.border = "2px solid yellow"; // 포커스 시 노란색
+  });
+
+  userInput.addEventListener("blur", function() {
+    userInput.style.border = "2px solid blue";   // 포커스 해제 시 파란색
+  });
+
+</script>
+</body>
+</html>

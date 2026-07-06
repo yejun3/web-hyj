@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        const student ={
+            name : '혹길동',
+
+            printname : () => {
+                console.log(this.name);
+                document.write(this.name);
+            }
+        }
+
+        //일반함수
+        student.printname(){
+            console.log("메서드 시작");
+
+            //setTimeout() 지정한 시간만큼 뒤에 함수를 실행한다.
+            setTimeout(() => {
+                console.log(this.name);
+            },1000);
+          }
+        
+    </script>
+</body>
+</html>

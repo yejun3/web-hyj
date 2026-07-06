@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>장바구니 시스템</title>
+</head>
+<body>
+  <h1>쇼핑몰 장바구니 관리 기능 만들기</h1>
+  <h2>상품 목록</h2>
+  <div id="product_list"></div>
+
+  <h3>장바구니</h3>
+  <ul id="cart"></ul> 
+
+  <script>
+    let products = [
+      { name: "키보드", price: 30000 },
+      { name: "마우스", price: 15000 },
+      { name: "모니터", price: 200000 }
+    ];
+
+    let cart = [];
+
+    function printProducts() {
+      let html = "";
+      for (let i = 0; i < products.length; i++) {
+        html += products[i].name + " - " + products[i].price + "원 ";
+        html += "<button onclick=\"addCart('" + products[i].name + "')\">장바구니 담기</button><br>";
+      }
+      document.getElementById("product_list").innerHTML = html;
+    }
+
+    function addCart(productName) {
+      let product = products.find(p => p.name === productName);
+      let item = cart.find(c => c.name === productName);
+
+      if (item) {
+        item.quantity++;
+      } else {
+        cart.push({ name: product.name, price: product.price, quantity: 1 });
+      }
+      printCart();
+    }
+
+    function printCart() {
+      let result = document.getElementById("cart");
+      result.innerHTML = "";
+      let total = 0;
+
+      for (let i = 0; i < cart.length; i++) {
+        total += cart[i].price * cart[i].quantity;
+        result.innerHTML += "<li>" + cart[i].name + " - " + cart[i].price + "원 x " + cart[i].quantity + "</li>";
+      }
+
+      result.innerHTML += "<p><strong>총합: " + total + "원</strong></p>";
+    }
+
+    printProducts();
+  </script>
+</body>
+</html>
