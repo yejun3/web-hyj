@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>도서 검색 서비스</title>
+    <style>
+        /* 화면 중앙 정렬 및 기본 스타일 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            color: #333;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        /* 검색 영역 스타일 */
+        .search-container {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 15px;
+        }
+
+        /* HTML 조건: id="keyword" */
+        #keyword {
+            flex: 1;
+            padding: 12px 16px;
+            font-size: 16px;
+            border: 2px solid #ced4da;
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        #keyword:focus {
+            border-color: #3498db;
+        }
+
+        /* HTML 조건: id="searchBtn" */
+        #searchBtn {
+            padding: 12px 24px;
+            font-size: 16px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+
+        #searchBtn:hover {
+            background-color: #2980b9;
+        }
+
+        /* HTML 조건: id="message" (오류 메시지) */
+        #message {
+            width: 100%;
+            max-width: 600px;
+            min-height: 20px;
+            color: #e74c3c;
+            font-size: 14px;
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+
+        /* HTML 조건: id="bookList" (결과 영역) */
+        #bookList {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        /* 출력 조건: 카드 형태 스타일 */
+        .book-card {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 1px solid #e9ecef;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .book-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+            line-height: 1.4;
+            margin-bottom: 4px;
+        }
+
+        .book-info {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .book-info strong {
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>도서 검색 서비스</h1>
+
+    <div class="search-container">
+        <input type="text" id="keyword" placeholder="도서 제목을 입력하세요...">
+        <button id="searchBtn">검색</button>
+    </div>
+
+    <div id="message"></div>
+    <div id="bookList"></div>
+
+    <script>
+        // DOM 요소 정의
+        const keywordInput = document.getElementById('keyword');
+        const searchBtn = document.getElementById('searchBtn');
+        const messageDiv = document.getElementById('message');
+        const bookListDiv = document.getElementById('bookList');
+
+        // 검색 버튼 클릭 이벤트
+        searchBtn.addEventListener('click', performSearch);
+        // 함수의 이름만 씀 -> click을 했으 댸만 실행되게,  ()를 붙일 시 바로 실행해버림
+
+        // 엔터키 입력 이벤트 지원
+        keywordInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+
+        function performSearch() {
+            // 기존 결과 및 메시지 초기화
+            messageDiv.textContent = '';
+            bookListDiv.innerHTML = '';
+
+            const query = keywordInput.value.trim();
+
+            // JS 유효성 검사 1: 검색어 빈 값
+            if (query === '') {
+                messageDiv.textContent = '검색어를 입력하세요';
+                return;
+            }
+
+            // JS 유효성 검사 2: 검색어 길이 (2자 이상)
+            if (query.length < 2) {
+                messageDiv.textContent = '검색어는 2자 이상 입력해야 합니다.';
+                return;
+            }
+
+            // JS 유효성 검사 3: 특수문자 제한 (한글, 영어, 숫자, 공백만 허용하는 정규식)
+            const allowedRegex = /^[a-zA-Z0-9가-힣\s]+$/;
+            if (!allowedRegex.test(query)) {
+                messageDiv.textContent = '특수문자는 입력할 수 없습니다. (한글, 영어, 숫자, 공백만 가능)';
+                return;
+            }
+
+            // API 호출 로딩 표시
+            messageDiv.style.color = '#3498db';
+            messageDiv.textContent = '도서 정보를 검색 중입니다...';
+
+            // API URL 생성 (인코딩 처리 필수)
+            const url = `https://openlibrary.org/search.json?title=${encodeURIComponent(query)}`;
+
+            // 힌트 반영: fetch(), then(), catch() 구조
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response error');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    messageDiv.textContent = ''; // 로딩 메시지 지우기
+                    messageDiv.style.color = '#e74c3c'; // 에러 대비 색상 원복
+
+                    // JS 유효성 검사 4: 검색 결과 없음
+                    if (!data.docs || data.docs.length === 0) {
+                        messageDiv.textContent = '검색 결과가 없습니다';
+                        return;
+                    }
+
+                    // 힌트 반영: Array.slice()를 활용해 상위 20개만 출력 (과도한 렌더링 방지)
+                    const limitedDocs = data.docs.slice(0, 20);
+
+                    // 힌트 반영: map()과 join()을 활용한 카드 렌더링
+                    const cardHTML = limitedDocs.map(book => {
+                // 저자 및 출판사 데이터 가공 (배열 형식이므로 가공 필요)
+                        const author = book.author_name ? book.author_name.join(', ') : '정보 없음';
+                        const firstPublishYear = book.first_publish_year ? book.first_publish_year : '정보 없음';
+                        const publisher = book.publisher ? book.publisher.slice(0, 3).join(', ') : '정보 없음'; // 최대 3개만 표시
+
+                        // 출력 조건 반영: 제목, 저자, 최초 출판연도, 출판사 포함 카드 형태
+                        return `
+                            <div class="book-card">
+                                <div class="book-title">${escapeHtml(book.title)}</div>
+                                <div class="book-info"><strong>저자:</strong> ${escapeHtml(author)}</div>
+                                <div class="book-info"><strong>최초 출판연도:</strong> ${firstPublishYear}년</div>
+                                <div class="book-info"><strong>출판사:</strong> ${escapeHtml(publisher)}</div>
+                            </div>
+                        `;
+                    }).join(''); // 배열을 하나의 문자열로 결합
+
+                    bookListDiv.innerHTML = cardHTML;
+                })
+                .catch(error => {
+                    // JS 유효성 검사 5: API 오류
+                    messageDiv.style.color = '#e74c3c';
+                    messageDiv.textContent = '도서 정보를 불러오지 못했습니다';
+                    console.error('API Error:', error);
+                });
+        }
+
+        // XSS(보안) 방지를 위한 문자열 치환 함수
+        function escapeHtml(text) {
+            if (!text) return '';
+            return String(text)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+    </script>
+</body>
+</html>

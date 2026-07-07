@@ -1,0 +1,261 @@
+
+
+
+---
+
+```
+<style>
+    /* -------------------------------------------------------------
+       [2단계: CSS 레이아웃 스타일 설정]
+       화면의 정렬과 도서 목록이 바둑판(Grid) 형태로 나오도록 옷을 입힙니다.
+    ------------------------------------------------------------- */
+    
+    /* 전체 화면 기본 여백 초기화 및 중앙 정렬 준비 */
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+        /* 아래 flex 속성들이 화면 중앙 정렬을 담당합니다 */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 40px 20px;
+    }
+
+    /* 검색창과 버튼을 가로로 나란히 배치하기 위한 상자 */
+    .search-container {
+        display: flex;
+        gap: 10px;
+        width: 100%;
+        max-width: 600px;
+        margin-bottom: 15px;
+    }
+
+    #keyword {
+        flex: 1;
+        padding: 12px;
+        font-size: 16px;
+        border: 2px solid #ced4da;
+        border-radius: 8px;
+    }
+
+    #searchBtn {
+        padding: 12px 24px;
+        font-size: 16px;
+        background-color: #3498db;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    /* 에러 메시지가 출력될 글자 스타일 (빨간색) */
+    #message {
+        width: 100%;
+        max-width: 600px;
+        color: #e74c3c;
+        font-size: 14px;
+        margin-bottom: 25px;
+        min-height: 20px;
+    }
+
+    /* [개념] display: grid (바둑판 레이아웃)
+       전체 결과 영역을 격자 무늬 형태로 지정합니다.
+       repeat(auto-fill, minmax(280px, 1fr)) 구문은 화면 크기에 맞춰서
+       카드가 한 줄에 3개가 들어갈지, 2개가 들어갈지 자동으로 조절해 줍니다. */
+    #bookList {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+        width: 100%;
+        max-width: 1000px;
+    }
+
+    /* 개별 도서가 표현될 독립된 카드 형태의 스타일 */
+    .book-card {
+        background: #ffffff;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05); /* 카드 아래 살짝 깔리는 그림자 */
+        border: 1px solid #e9ecef;
+    }
+
+    .book-title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 8px;
+        color: #2c3e50;
+    }
+    
+    .book-info {
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 4px;
+    }
+</style>
+
+```
+
+```
+<h1>📚 도서 검색 서비스</h1>
+
+<div class="search-container">
+    <input type="text" id="keyword" placeholder="도서 제목을 입력하세요...">
+    <button id="searchBtn">검색</button>
+</div>
+
+<div id="message"></div>
+
+<div id="bookList"></div>
+
+
+<script>
+    // [구문해석] document.getElementById()
+    // HTML에 배치해 둔 요소를 ID 이름표를 통해 자바스크립트 변수로 호출합니다.
+    const keywordInput = document.getElementById('keyword');
+    const searchBtn = document.getElementById('searchBtn');
+    const messageDiv = document.getElementById('message');
+    const bookListDiv = document.getElementById('bookList');
+
+    // [구문해석] addEventListener('click', 함수)
+    // 버튼에 감시 센서를 달아둡니다. '클릭'이 감지되면 performSearch 함수를 작동시킵니다.
+    searchBtn.addEventListener('click', performSearch);
+// 함수의 이름만 씀 
+
+    // 엔터키를 눌렀을 때도 검색이 작동하도록 편의 기능 추가
+    keywordInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            performSearch();
+        }
+    });
+
+
+    // 사용자가 검색 버튼을 누르면 최초로 실행되는 메인 제어 함수입니다.
+    function performSearch() {
+        // 새로운 검색을 시작하므로, 기존에 남아있던 에러 메시지와 카드 목록을 깨끗이 비웁니다.
+        messageDiv.textContent = '';
+        bookListDiv.innerHTML = '';
+
+        // [구문해석] .value.trim()
+        // 사용자가 입력창에 쓴 글자(value)를 가져온 뒤, 양쪽 끝의 불필요한 공백을 잘라냅니다(trim).
+        const query = keywordInput.value.trim();
+
+        // [4단계: JS 유효성 검사 조건문 패턴]
+        
+        // 조건 1: 아무것도 입력하지 않고 버튼을 눌렀을 때 차단
+        if (query === '') {
+            messageDiv.textContent = '검색어를 입력하세요';
+            return; // return을 만나면 함수가 거기서 즉시 종료되어 아래 코드가 실행되지 않습니다.
+        }
+
+        // 조건 2: 검색어 길이가 너무 짧을 때 차단 (2자 이상 필수)
+        if (query.length < 2) {
+            messageDiv.textContent = '검색어는 2자 이상 입력해야 합니다.';
+            return;
+        }
+
+        // 조건 3: 특수문자 제한 정규표현식
+        // [개념] /^[a-zA-Z0-9가-힣\s]+$/
+        // 시작(^)부터 끝($)까지 영어, 숫자, 한글, 공백(\s)으로만 무조건 1자 이상(+) 구성되어야 한다는 규칙 지도입니다.
+        const allowedRegex = /^[a-zA-Z0-9가-힣\s]+$/;
+        
+        // [구문해석] .test(query)
+        // 규칙 지도에 사용자의 입력값(query)을 대조합니다. 규칙에 맞지 않으면(! 기호 사용) 차단합니다.
+        if (!allowedRegex.test(query)) {
+            messageDiv.textContent = '특수문자는 입력할 수 없습니다. (한글, 영어, 숫자, 공백만 가능)';
+            return;
+        }
+
+        // 모든 유효성 검사를 통과했다면, 실제 외부 서버와 통신하는 fetchBooks 함수를 호출합니다.
+        fetchBooks(query);
+    }
+
+    // 외부 Open Library 서버와 통신하여 데이터를 가져오고 화면에 출력하는 함수입니다.
+    function fetchBooks(query) {
+        // 검색어에 한글이나 공백이 섞여있어도 인터넷 주소창이 깨지지 않도록 한 번 압축 코딩(encodeURIComponent)해 줍니다.
+        const url = `https://openlibrary.org/search.json?title=${encodeURIComponent(query)}`;
+
+        // 로딩 중임을 사용자에게 알림
+        messageDiv.style.color = '#3498db';
+        messageDiv.textContent = '도서 정보를 검색 중입니다...';
+
+        // [5단계: 비동기 통신 Fetch API]
+        // [개념] fetch(), then(), catch()
+        // 인터넷 너머의 서버에 요청을 보내고 답장을 받아 가공하는 비동기 처리의 기본 기본 세트입니다.
+        fetch(url)
+            .then(response => {
+                // 서버 연결 자체가 실패(주소 오류 등)했는지 1차 체크합니다.
+                if (!response.ok) {
+                    throw new Error('네트워크 응답 에러');
+                }
+                // [구문해석] response.json()
+                // 서버가 던져준 가공되지 않은 텍스트 데이터를 컴퓨터가 읽기 편한 자바스크립트 객체 형식(JSON)으로 변환하여 다음 then으로 토스합니다.
+                return response.json();
+            })
+            .then(data => {
+                messageDiv.textContent = ''; // 로딩 메시지 지우기
+                messageDiv.style.color = '#e74c3c'; // 메시지 기본 색상(빨간색)으로 원복
+
+                // 조건 4: 통신은 성공했으나 내부 책 데이터 배열(docs)이 비어있어 결과가 없는 경우 처리
+                if (!data.docs || data.docs.length === 0) {
+                    messageDiv.textContent = '검색 결과가 없습니다';
+                    return;
+                }
+
+                // [구문해석] data.docs.slice(0, 20)
+                // 서버가 보내준 데이터 원석 배열에서 정확히 0번째부터 20개만 싹둑 오려내어 limitedDocs 변수에 담습니다. (과부하 방지)
+                const limitedDocs = data.docs.slice(0, 20);
+
+                // [구문해석] .map() 과 .join()을 이용한 대량 카드 생성
+                // map은 20개의 데이터 상자를 하나씩 열어서 내부 알맹이를 가지고 20개의 HTML 태그 세트로 변환해 주는 역할을 합니다.
+                const cardHTML = limitedDocs.map(book => {
+                    // 예외 처리: 데이터 내부에 저자나 출판사 정보가 없을 때를 대비해 기본값 지정을 해줍니다.
+                    const author = book.author_name ? book.author_name.join(', ') : '정보 없음';
+                    const year = book.first_publish_year ? book.first_publish_year : '정보 없음';
+                    const publisher = book.publisher ? book.publisher.slice(0, 2).join(', ') : '정보 없음';
+
+                    // 실제 화면에 그려질 HTML 카드 구조를 백틱( ` ) 기호를 사용해 가독성 높게 작성하여 반환(return)합니다.
+                    return `
+                        <div class="book-card">
+                            <div class="book-title">${escapeHtml(book.title)}</div>
+                            <div class="book-info"><strong>저자:</strong> ${escapeHtml(author)}</div>
+                            <div class="book-info"><strong>최초 출판연도:</strong> ${year}년</div>
+                            <div class="book-info"><strong>출판사:</strong> ${escapeHtml(publisher)}</div>
+                        </div>
+                    `;
+                }).join(''); 
+                // [구문해석] .join('')
+                // map의 결과물은 [, , ,] 형태의 배열이라 그대로 화면에 넣으면 글자 사이에 콤마가 찍힙니다. 
+                // join('') 속성을 통해 콤마를 싹 지우고 하나의 길고 매끄러운 전체 문자열 문서로 이어 붙여 줍니다.
+
+                // [구문해석] .innerHTML
+                // 완성된 거대한 카드 마크다운 문자열(cardHTML)을 HTML 뼈대에 만들어 둔 bookListDiv 상자 내부에 통째로 주입하여 화면에 렌더링합니다.
+                bookListDiv.innerHTML = cardHTML;
+            })
+            .catch(error => {
+                // 조건 5: API 주소 에러, 인터넷 끊김, 서버 다운 등 통신 자체가 실패했을 때 잡아내는 소방수 구문입니다.
+                messageDiv.style.color = '#e74c3c';
+                messageDiv.textContent = '도서 정보를 불러오지 못했습니다';
+                console.error('상세 에러 내용:', error);
+            });
+    }
+
+    // [보안강화 예외 구문] XSS 방지용 HTML 치환 함수
+    // 사용자가 입력한 값이나 외부 데이터에 깃든 해킹용 스크립트 문자 태그(<, > 등)를 일반 안전한 문자 코드로 바꿔주는 역할을 합니다.
+    function escapeHtml(text) {
+        if (!text) return '';
+        return String(text)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+</script>
+
+```

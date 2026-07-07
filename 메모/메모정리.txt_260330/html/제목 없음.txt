@@ -1,0 +1,120 @@
+
+이 텍스트를 메모장에 적어두고 빈칸을 하나씩 지워가며 코딩해 보세요!
+
+---
+
+■ 도서 검색 서비스 개발 메모
+
+[1. 개발 구현 순서]
+단계 1: HTML로 화면에 필요한 입력창, 버튼, 결과창 틀 배치하기
+단계 2: CSS로 전체 화면을 중앙 정렬하고 결과 영역을 바둑판(Grid) 모양으로 만들기
+단계 3: JS로 HTML 요소들을 원격 제어할 변수 선언 및 버튼 클릭 이벤트 연결하기
+단계 4: JS로 검색어의 빈 값, 글자 수, 특수문자 제한(정규식) 유효성 검사 작성하기
+단계 5: JS로 Fetch API를 호출하고 받아온 데이터를 잘라내어(slice) 화면에 카드 형태로 넣기(map, join)
+
+[2. HTML 구조 잡기 가이드 (빈칸 채우기)]
+
+* 힌트: 지정된 ID 이름표를 정확하게 매칭하세요.
+
+[3. CSS 레이아웃 핵심 가이드]
+
+* 힌트: 결과 창 내부의 카드가 화면 크기에 맞춰 자동으로 줄바꿈되게 만듭니다.
+
+#bookList {
+display: _______; (힌트: 바둑판 레이아웃을 뜻하는 단어)
+grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+gap: 20px;
+}
+.book-card {
+background: #ffffff;
+border: 1px solid #ddd;
+padding: 20px;
+box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+[4. JS 유효성 검사 및 비동기 구현 가이드 (빈칸 채우기)]
+
+// ① HTML 요소 가져오기
+const keywordInput = document.getElementById('keyword');
+const searchBtn = document.getElementById('searchBtn');
+const messageDiv = document.getElementById('message');
+const bookListDiv = document.getElementById('bookList');
+
+// ② 버튼에 클릭 감지 센서 달기
+searchBtn.addEventListener('_______', performSearch); (힌트: 마우스 클릭 이벤트 이름)
+
+// ③ 유효성 검사 함수
+function performSearch() {
+messageDiv.textContent = '';
+bookListDiv.innerHTML = '';
+
+```
+const query = keywordInput.value.trim(); // 앞뒤 공백 제거
+
+if (query === '') {
+    messageDiv.textContent = '검색어를 입력하세요';
+    return;
+}
+if (query.length < _______) { (힌트: 최소 글자 수 조건 숫자)
+    messageDiv.textContent = '검색어는 2자 이상 입력해야 합니다.';
+    return;
+}
+
+// 한글, 영어, 숫자, 공백만 허용하는 정규식 지도
+const allowedRegex = /^[a-zA-Z0-9가-힣\s]+$/;
+if (!allowedRegex._______(query)) { (힌트: 정규식 패턴과 매칭하는 메서드 이름)
+    messageDiv.textContent = '특수문자는 입력할 수 없습니다.';
+    return;
+}
+
+fetchBooks(query);
+
+```
+
+}
+
+// ④ 서버 통신 및 데이터 출력 함수
+function fetchBooks(query) {
+const url = `https://openlibrary.org/search.json?title=${encodeURIComponent(query)}`;
+
+```
+_______(url) (힌트: 네트워크 요청을 보내는 내장 함수)
+    .then(response => {
+        if (!response.ok) throw new Error();
+        return response._______(); (힌트: 응답 데이터를 JS 객체로 변환하는 메서드)
+    })
+    .then(data => {
+        if (!data.docs || data.docs.length === 0) {
+            messageDiv.textContent = '검색 결과가 없습니다';
+            return;
+        }
+
+        // 상위 20개만 자르기
+        const limitedDocs = data.docs._______(0, 20); (힌트: 배열 잘라내기 메서드)
+
+        // 데이터를 HTML 태그 배열로 변환하고 합치기
+        const cardHTML = limitedDocs._______(book => { (힌트: 배열 순회/변환 메서드)
+            const author = book.author_name ? book.author_name.join(', ') : '정보 없음';
+            const year = book.first_publish_year || '정보 없음';
+            const publisher = book.publisher ? book.publisher[0] : '정보 없음';
+
+            return `
+                <div class="book-card">
+                    <div class="book-title">${book.title}</div>
+                    <div>저자: ${author}</div>
+                    <div>출판연도: ${year}년</div>
+                    <div>출판사: ${publisher}</div>
+                </div>
+            `;
+        })._______(''); (힌트: 배열을 하나의 문자열로 결합하는 메서드)
+
+        // 결과 화면에 최종 주입
+        bookListDiv._______ = cardHTML; (힌트: 내부 HTML 구조를 바꾸는 속성)
+    })
+    ._______(error => { (힌트: 에러가 났을 때 잡아내는 메서드)
+        messageDiv.textContent = '도서 정보를 불러오지 못했습니다';
+    });
+
+```
+
+}

@@ -1,0 +1,72 @@
+배열
+
+##배열의 요소추가
+-> 배열명[index] = 값;  
+ex) const arr = [1, 2, 3];
+     arr[5] = 6;
+     console.log(arr); // [1, 2, 3, empty × 2, 6]
+     console.log(arr.length); // 6
+
+-> 배열명.push(값);
+const a = [1, 2, 3];
+
+a.push(4);       // [1,2,3,4]가 된다
+
+a.unshift(0);    // [0,1,2,3]이 된다.
+
+요소삭제 
+.pop() : 맨 뒤에 값을 제거 
+.shift(); : 맨 앞의 값을 제거
+
+
+##탐색과 포함여부 확인
+
+- 값 위치 찾기: `indexOf`, `lastIndexOf` ->위치를 반환
+- 포함 여부만 확인: `includes`              -> true/false를 반환
+- 조건으로 찾기: `find`, `findIndex`  -> 배열.find( n(배열에서 얻고싶은 값) => n>10(걸러낼 조건))
+
+```jsx
+const names = ['kim', 'lee', 'park'];
+names.indexOf('lee');        //  인덱스 번호인 1을 반환
+names.includes('choi');      //  없으면 false를 반환
+[5, 12, 8].find(n => n > 10);     // 조건에 부합하는 12를 반환
+[5, 12, 8].findIndex(n => n%2===0); // 1이다.
+
+
+## 배열의 순회
+
+- `for`, `for…of` , `forEach` 가 있다.
+- 변환 필터링이 필요하다면 `map` , `filter` 가 편리하다
+- 누적 계산에는 `recude` 를 사용한다.
+```
+const iArr = [3, 7, 11, 15];
+
+// 2) for...of이다
+//break/continue/return 을 이용하여 중단하는것이 가능하다.
+const iArr = [3, 7, 11, 15];
+let found = null;
+
+for (const v of iArr ) {
+  if (v > 10) { found = v; break; } // 11에서 멈춘다
+}
+// found === 11이다
+// 3) forEach이다
+//중단이 불가능 하다
+let found2 = null;
+iArr .forEach(v => {
+  if (v > 10) { found2 = v; /* break 불가 */ }
+});
+// found2는 11이 된 후 15가 된다. 루프는 끝까지 돌았다. 전체 순회
+
+// 4) map이다
+//반환값을 모아 동일 길이의 배열을 만든다
+//모든 배열을 순회한다(중단할 수 없다)
+const doubled = arr.map(v => v * 2); // [2,4,6]이다
+
+// 5) filter이다
+//조건을 통과한 요소만 추려 새 배열을 만든다
+const even = arr.filter(v => v % 2 === 0); // [2]이다
+
+// 6) reduce이다
+//배열을 하나의 값(합계, 곱, 객체, 다른 배열 등)으로 누적한다
+const sum = arr.reduce((acc, v) => acc + v, 0); // 6이다

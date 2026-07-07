@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        #weatherBox { margin-top: 15px; padding: 15px; border: 1px solid #ddd; display: none; background-color: #f9f9f9; }
+        #message { color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>도시 날씨 조회 서비스</h1>
+        <select id="citySelect">
+            <option>서울</option>
+            <option>부산</option>
+            <option>제주</option>
+            <option>도쿄</option>
+            <option>뉴옥</option>
+        </select>
+        <button id="weatherBtn"></button>
+        <p id="message"></p>
+        <div id="weatherBox">
+            도시를 선텍하고 날씨를 조히하세요
+        </div>
+    </div>
+
+    <script>
+        // 도시 데이터 객체
+    const cities = [
+        { name: "서울", lat: 37.5665, lon: 126.9780 },
+        { name: "부산", lat: 35.1796, lon: 129.0756 },
+        { name: "제주", lat: 33.4996, lon: 126.5312 },
+        { name: "도쿄", lat: 35.6762, lon: 139.6503 },
+        { name: "뉴욕", lat: 40.7128, lon: -74.0060 }
+    ];
+
+    // DOM요소 가져오기
+    const citySelect = document.getElementById("citySelect");
+    const weatherBtn=document.getElementById("weatherBtn");
+    const message=document.getElementById("message");
+    const weatherBox=document.getElementById("weatherBox");
+
+    // 버튼 클릭시 검색결과를 조회하는 함수실행
+    weatherBtn.addEventListener("click", async function () {
+        // 초기화 
+        message.innerText="";
+        weatherBox.innerHTML="";     
+    })
+    
+    function performSearch() {
+        //기존목록 제거 
+        message.innerText="";
+        weatherBox.innerHTML="";
+
+        fetch("https://api.open-meteo.com/v1/forecast?latitude=37.5665&longitude=126.9780&current_weather=true")
+        .then(response =>{
+            if(!response.ok){
+                throw new Error ('Network response error')
+            }
+            return response.json();
+        }).then(data => {
+            if(!data.cities || data.cities.length===0){
+                message.innerText="데이터가 없습니다."
+            }
+        }).then
+
+    }
+
+    </script>
+
+</body>
+</html>
