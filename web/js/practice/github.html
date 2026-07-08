@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Profile Search</title>
+    <style>
+    /* 1. 전체 기본 스타일 및 폰트 설정 */
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    }
+
+    body {
+        background-color: #0d1117; /* GitHub 다크모드 배경색 */
+        color: #c9d1d9; /* 기본 텍스트 색상 */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+    }
+
+    /* 2. 메인 컨테이너 (클래스명 오타 수정) */
+    .container { 
+        background-color: #161b22;
+        border: 1px solid #30363d;
+        border-radius: 12px;
+        padding: 30px;
+        width: 100%;
+        max-width: 500px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        text-align: center;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+        color: #f0f6fc;
+    }
+
+    /* 3. 검색 영역 스타일 */
+    #githubId {
+        width: 70%;
+        padding: 10px 14px;
+        background-color: #0d1117;
+        border: 1px solid #30363d;
+        border-radius: 6px;
+        color: #f0f6fc;
+        font-size: 0.95rem;
+        outline: none;
+        transition: border-color 0.2s;
+    }
+
+    #githubId:focus {
+        border-color: #58a6ff; /* 포커스 시 GitHub 블루 색상 */
+    }
+
+    #searchBtn {
+        width: 25%;
+        padding: 10px;
+        margin-left: 3%;
+        background-color: #238636; /* GitHub 초록색 버튼 */
+        color: #ffffff;
+        border: 1px solid rgba(240, 246, 252, 0.1);
+        border-radius: 6px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    #searchBtn:hover {
+        background-color: #2ea043;
+    }
+
+    /* 4. 메시지 영역 (오류/안내) */
+    #message {
+        margin-top: 12px;
+        font-size: 0.85rem;
+        color: #ff7b72; /* 에러 붉은색 */
+        min-height: 20px;
+    }
+
+    /* 5. 결과 프로필 카드 영역 */
+    #profileBox {
+        margin-top: 25px;
+    }
+
+    .profile-card {
+        background-color: #0d1117;
+        border: 1px solid #30363d;
+        border-radius: 10px;
+        padding: 24px;
+        text-align: left;
+        animation: fadeIn 0.3s ease-in-out;
+        
+        /* 내부 뱃지들을 가로로 정렬하기 위해 Flexbox 사용 */
+        display: flex;
+        flex-direction: column;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 프로필 이미지 내부 포지셔닝 */
+    .profile-card .img {
+        text-align: center;
+        margin-bottom: 20px;
+        order: 1; /* 출력 순서 첫 번째 */
+    }
+
+    .profile-card img {
+        border: 2px solid #30363d;
+    }
+
+    /* 텍스트 정보 스타일 */
+    .info-text {
+        order: 2; /* 출력 순서 두 번째 */
+        margin-bottom: 15px;
+    }
+
+    .info-text h2 {
+        color: #58a6ff;
+        font-size: 1.4rem;
+        margin-bottom: 8px;
+    }
+
+    .info-text p {
+        font-size: 0.9rem;
+        color: #8b949e;
+        margin-bottom: 6px;
+        line-height: 1.4;
+    }
+
+    /* 6. 팔로우 및 저장소 뱃지 스타일 */
+    .follow-box {
+        background-color: #21262d;
+        border: 1px solid #30363d;
+        color: #c9d1d9;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        
+        /* 가로로 나열되도록 설정 */
+        display: inline-block;
+        margin-right: 6px;
+        margin-bottom: 15px;
+        order: 3; /* 텍스트 정보 밑으로 배치 */
+        width: fit-content;
+    }
+
+    /* 7. GitHub 링크 스타일 */
+    .profile-card a {
+        display: block;
+        text-align: center;
+        background-color: #21262d;
+        border: 1px solid #30363d;
+        color: #c9d1d9;
+        padding: 10px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-top: 5px;
+        transition: all 0.2s;
+        order: 4; /* 가장 마지막에 배치 */
+    }
+
+    .profile-card a:hover {
+        background-color: #30363d;
+        border-color: #8b949e;
+        color: #f0f6fc;
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <h1>GitHub 사용자 프로필 검색</h1>
+        <input id="githubId" type="text" placeholder="GitHub 아이디 입력">
+        <button id="searchBtn">검색</button>
+        <p id="message"></p>
+        <div id="profileBox"></div>
+    </div>
+
+    <script>
+        // DOM 요소 선언
+        const githubIdInput = document.getElementById("githubId");
+        const searchBtn = document.getElementById("searchBtn");
+        const message = document.getElementById("message");
+        const profileBox = document.getElementById("profileBox");
+
+        // 버튼 클릭 이벤트 바인딩
+        searchBtn.addEventListener("click", checkId);
+
+        function checkId() {
+            // 버튼을 누른 시점의 입력 값을 가져옴 (공백 제거)
+            const githubId = githubIdInput.value.trim();
+            
+            // 초기화
+            message.textContent = "";
+            profileBox.innerHTML = "";
+
+            // 1. 빈 값 검사
+            if (githubId === "") {
+                message.textContent = "검색 불가";
+                return;
+            }
+
+            // 2. 길이 검사 (3자 이상 20자 이하가 아니면 에러)
+            if (githubId.length < 3 || githubId.length > 20) {
+                message.textContent = "3자 이상 20자 이하로 입력해주세요.";
+                return;
+            }
+
+            // 3. 허용 문자 및 하이픈 위치 정규식 검사
+            // 처음/끝 하이픈 불가는 물론, 연속된 하이픈(--)도 차단하는 완벽한 GitHub 정규식 구현
+            const idRegex = /^[a-zA-Z0-9](?:[a-zA-Z0-9]|-(?=[a-zA-Z0-9])){1,19}$/;
+            if (!idRegex.test(githubId)) {
+                message.textContent = "영어, 숫자, 하이픈만 허용되며 처음과 끝, 또는 연속해서 하이픈을 사용할 수 없습니다.";
+                return;
+            }
+
+            const url = `https://api.github.com/users/${githubId}`;
+
+            fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    // 사용자 없음 (404) 에러 던지기
+                    if (response.status === 404) {
+                        throw new Error('NOT_FOUND');
+                    }
+                    // 그 외 API 제한 등의 에러 던지기
+                    throw new Error('API_LIMIT_OR_ERROR');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // GitHub API 실제 키 값 매핑 및 예외 처리
+                const profileImg = data.avatar_url ? data.avatar_url : "";
+                const id = data.login ? data.login : "정보없음";
+                const name = data.name ? data.name : "정보없음";
+                const intro = data.bio ? data.bio : "정보없음";
+                const followerCount = data.followers !== undefined ? data.followers : 0;
+                const followingCount = data.following !== undefined ? data.following : 0;
+                const storeCount = data.public_repos !== undefined ? data.public_repos : 0;
+                const githubUrl = data.html_url ? data.html_url : "https://github.com";
+
+                const cardHTML = `
+                    <div class="profile-card">
+                        <div class="img">
+                            <img src="${profileImg}" alt="프로필이미지" style="width:150px; height:150px; border-radius:50%;">
+                        </div>
+                        <div class="info-text">
+                            <h2>${id}</h2>
+                            <p>이름 : ${name}</p>
+                            <p>소개 : ${intro}</p>
+                        </div>
+                        <div class="follow-box">팔로워 : ${followerCount}</div>
+                        <div class="follow-box">팔로잉 : ${followingCount}</div>
+                        <div class="follow-box">저장소 : ${storeCount}</div>
+                        <a href="${githubUrl}" target="_blank">GitHub 페이지 방문</a>
+                    </div>
+                `;
+                
+                profileBox.innerHTML = cardHTML;
+            })
+            .catch(error => {
+                // 에러 종류에 따른 메시지 분기 처리
+                if (error.message === 'NOT_FOUND') {
+                    message.textContent = "존재하지 않는 사용자입니다.";
+                } else {
+                    message.textContent = "잠시 후 다시 시도하세요";
+                }
+                console.error('API Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
