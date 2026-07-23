@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.korea.petclinic.dao.ReservationDAO">
+
+    <!-- 모든 예약 정보 조회 -->
+    <select id="findAll" resultType="com.korea.petclinic.vo.ReservationVO">
+        SELECT * FROM reservation
+    </select>
+
+    <!-- 특정 예약 조회 -->
+    <select id="findById" resultType="com.korea.petclinic.vo.ReservationVO">
+        SELECT * FROM reservation WHERE id = #{id}
+    </select>
+
+    <!-- 새로운 예약 등록 -->
+    <insert id="insert">
+        INSERT INTO reservation (pet_name, owner_name, animal_type, doctor_name, reservation_date, status, price)
+        VALUES (#{petName}, #{ownerName}, #{animalType}, #{doctorName}, #{reservationDate}, #{status}, #{price})
+    </insert>
+
+    <!-- 예약 정보 수정 -->
+    <update id="update">
+        UPDATE reservation
+        SET pet_name = #{petName},
+            owner_name = #{ownerName},
+            animal_type = #{animalType},
+            doctor_name = #{doctorName},
+            reservation_date = #{reservationDate},
+            status = #{status},
+            price = #{price}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 예약 삭제 -->
+    <delete id="delete">
+        DELETE FROM reservation WHERE id = #{id}
+    </delete>
+
+    <!-- 검색 기준 선택 (동적 쿼리) -->
+    <select id="searchDetail" resultType="com.korea.petclinic.vo.ReservationVO">
+        SELECT * FROM reservation
+        <where>
+            <choose>
+                <when test="searchType == 'pet'">
+                    pet_name LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+                <when test="searchType == 'owner'">
+                    owner_name LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+                <when test="searchType == 'doctor'">
+                    doctor_name LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+            </choose>
+        </where>
+    </select>
+
+    <!-- 진료비 정렬 -->
+    <select id="findAllOrder" resultType="com.korea.petclinic.vo.ReservationVO">
+        SELECT * FROM reservation
+        <choose>
+            <when test="sort == 'asc'">
+                ORDER BY price ASC
+            </when>
+            <when test="sort == 'desc'">
+                ORDER BY price DESC
+            </when>
+            <otherwise>
+                ORDER BY id DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <!-- 예약 상태별 예약 수 조회 -->
+    <select id="findStatusCount" resultType="map">
+        SELECT status, COUNT(*) AS count
+        FROM reservation
+        GROUP BY status
+    </select>
+
+</mapper>

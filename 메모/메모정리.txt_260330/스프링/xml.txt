@@ -1,0 +1,17 @@
+xml문서
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+
+dtd(Document Type Definition)
+xml문서가 어떤 태그를 사용할 수 있고 어떤 구조로 작성되어야 하는지 정의하는 규칙
+
+mybatis의 dtd
+<mapper>
+<select>
+<insert>
+<update>
+<delete>
+<resultMap>
+<sql>과 같은 태그를 사용할 수 있다.

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.example.demo23.dao.BookDAO">
+  
+    <!-- 1: 전체 도서 조회 -->
+    <select id="findAll" resultType="com.example.demo23.vo.BookVO">
+        SELECT id, title, author, category, price, stock
+        FROM books
+    </select>
+
+    <!-- 2: 도서 번호를 이용한 단건 조회 -->
+    <select id="findById" resultType="com.example.demo23.vo.BookVO">
+        SELECT id, title, author, category, price, stock
+        FROM books
+        WHERE id = #{id}
+    </select>
+
+    <!-- 3: 도서 등록 -->
+    <insert id="insert">
+        INSERT INTO books (title, author, category, price, stock)
+        VALUES (#{title}, #{author}, #{category}, #{price}, #{stock})
+    </insert>
+
+    <!-- 4: 도서 수정 -->
+    <update id="update">
+        UPDATE books
+        SET title = #{title},
+            author = #{author},
+            category = #{category},
+            price = #{price},
+            stock = #{stock}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 5: 도서 삭제 -->
+    <delete id="delete">
+        DELETE FROM books
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 6: 카테고리별 도서 조회 -->
+    <select id="findByCategory" resultType="com.example.demo23.vo.BookVO">
+        SELECT id, title, author, category, price, stock
+        FROM books
+        WHERE category = #{category}
+    </select>
+
+    <!-- 7: 도서 제목 검색 (id를 findByTitle로 수정) -->
+    <select id="findByTitle" resultType="com.example.demo23.vo.BookVO">
+        SELECT id, title, author, category, price, stock
+        FROM books
+        WHERE title LIKE CONCAT('%', #{title}, '%')
+    </select>
+
+    <!-- 8: 가격 이상의 도서 조회 (id를 findByPrice로 수정) -->
+    <select id="findByPrice" resultType="com.example.demo23.vo.BookVO">
+        SELECT id, title, author, category, price, stock
+        FROM books
+        WHERE price &gt;= #{minPrice}
+        ORDER BY price ASC
+    </select>
+    
+    <!-- 9: 전체 도서 수량 조회 (id를 findCount로 수정) -->
+    <select id="findCount" resultType="int">
+        SELECT count(*)
+        FROM books
+    </select>
+    
+    <!-- 저자에 따른 책 조회 -->
+    <select id="findbyAuthor" resultType="com.example.demo23.vo.BookVO">
+        SELECT * FROM books
+        <where>
+            <if test="author != null">
+                author = #{author}
+            </if>
+        </where>
+    </select>
+    
+    <!-- 정렬 조건 조회 -->
+    <select id="findAllOrder" resultType="com.example.demo23.vo.BookVO">
+        SELECT * FROM books
+        <choose>
+            <when test="sort == 'priceDesc'">
+                ORDER BY price DESC
+            </when>
+            <when test="sort == 'titleAsc'">
+                ORDER BY title ASC
+            </when>
+            <otherwise>
+                ORDER BY id DESC
+            </otherwise>
+        </choose>
+    </select>
+  
+  </mapper>

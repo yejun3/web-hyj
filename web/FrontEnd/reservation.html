@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>반려동물 진료 예약 관리 시스템</title>
+  <link rel="stylesheet" href="reservation.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🏥 반려동물 진료 예약 관리</h1>
+    </header>
+
+    <!-- 1. 상단 상태별 현황 카드 (문제 10) -->
+    <section class="dashboard">
+      <div class="card status-reserved">
+        <h3>예약</h3>
+        <span id="count-reserved">0</span>건
+      </div>
+      <div class="card status-completed">
+        <h3>진료완료</h3>
+        <span id="count-completed">0</span>건
+      </div>
+      <div class="card status-cancelled">
+        <h3>예약취소</h3>
+        <span id="count-cancelled">0</span>건
+      </div>
+    </section>
+
+    <!-- 2. 컨트롤 바 (검색/정렬 및 등록 버튼) -->
+    <section class="control-bar">
+      <!-- 검색 폼 (문제 8) -->
+      <div class="search-box">
+        <select id="searchType">
+          <option value="pet">반려동물 이름</option>
+          <option value="owner">보호자 이름</option>
+          <option value="doctor">담당 수의사</option>
+        </select>
+        <input type="text" id="keyword" placeholder="검색어를 입력하세요">
+        <button id="btnSearch" class="btn btn-primary">검색</button>
+        <button id="btnReset" class="btn btn-secondary">초기화</button>
+      </div>
+
+      <!-- 정렬 & 등록 버튼 (문제 5, 9) -->
+      <div class="action-box">
+        <select id="sortType">
+          <option value="">정렬 선택</option>
+          <option value="asc">진료비 낮은 순</option>
+          <option value="desc">진료비 높은 순</option>
+        </select>
+        <button id="btnOpenModal" class="btn btn-success">+ 예약 등록</button>
+      </div>
+    </section>
+
+    <!-- 3. 예약 목록 테이블 (문제 3) -->
+    <section class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>반려동물</th>
+            <th>보호자</th>
+            <th>동물종류</th>
+            <th>담당의</th>
+            <th>예약일</th>
+            <th>상태</th>
+            <th>예상 진료비</th>
+            <th>관리</th>
+          </tr>
+        </thead>
+        <tbody id="reservationList">
+          <!-- JS로 동적 생성되는 데이터 영역 -->
+        </tbody>
+      </table>
+    </section>
+  </div>
+
+  <!-- 4. 등록 / 수정 모달 팝업 (문제 5, 6) -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-content">
+      <span id="btnCloseModal" class="close-btn">&times;</span>
+      <h2 id="modalTitle">예약 등록</h2>
+      
+      <form id="reservationForm">
+        <!-- 수정 시 사용할 ID 저장용 숨김 필드 -->
+        <input type="hidden" id="formId">
+
+        <div class="form-group">
+          <label for="petName">반려동물 이름</label>
+          <input type="text" id="petName" required>
+        </div>
+        <div class="form-group">
+          <label for="ownerName">보호자 이름</label>
+          <input type="text" id="ownerName" required>
+        </div>
+        <div class="form-group">
+          <label for="animalType">동물 종류</label>
+          <input type="text" id="animalType" placeholder="예: 강아지, 고양이" required>
+        </div>
+        <div class="form-group">
+          <label for="doctorName">담당 수의사</label>
+          <input type="text" id="doctorName" required>
+        </div>
+        <div class="form-group">
+          <label for="reservationDate">예약 날짜</label>
+          <input type="date" id="reservationDate" required>
+        </div>
+        <div class="form-group">
+          <label for="status">상태</label>
+          <select id="status">
+            <option value="예약">예약</option>
+            <option value="진료완료">진료완료</option>
+            <option value="예약취소">예약취소</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="price">예상 진료비(원)</label>
+          <input type="number" id="price" min="0" step="1000" required>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">저장하기</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="reservation.js"></script>
+</body>
+</html>

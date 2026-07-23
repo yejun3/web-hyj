@@ -1,0 +1,215 @@
+서점에서 판매하는 도서 정보를 관리하는 REST API를 개발한다.
+
+관리할 정보는 다음과 같다.
+
+도서 번호
+도서 제목
+저자
+카테고리
+가격
+재고 수량
+4. 데이터베이스
+
+데이터베이스 이름은 다음과 같이 작성한다.
+
+book_db
+
+테이블 이름은:
+
+books
+
+로 작성한다.
+
+테이블 구조는 다음 조건을 만족하도록 작성한다.
+
+컬럼   자료형   설명
+id   BIGINT   도서 번호, PK, 자동 증가
+title   VARCHAR(100)   도서 제목
+author   VARCHAR(50)   저자
+category   VARCHAR(30)   카테고리
+price   INT   가격
+stock   INT   재고
+
+테이블 생성 SQL을 직접 작성한다.
+
+5. 테스트 데이터
+
+다음 데이터를 데이터베이스에 저장한다.
+
+id   title   author   category   price   stock
+1   자바의 정석   남궁성   프로그래밍   30000   10
+2   스프링 부트 입문   김철수   프로그래밍   28000   5
+3   데이터베이스 기초   이영희   데이터베이스   25000   8
+4   리액트 시작하기   박민수   프로그래밍   32000   3
+5   MySQL 완벽 가이드   최지훈   데이터베이스   35000   7
+6   알고리즘 문제 해결   홍길동   알고리즘   40000   2
+
+VO 작성
+
+다음 패키지에 BookVO 클래스를 작성한다.
+
+com.example.demo.vo
+
+다음 필드를 작성한다.
+
+Long id
+
+String title
+
+String author
+
+String category
+
+int price
+
+int stock
+
+Lombok을 사용하여 Getter와 Setter를 생성한다.
+
+문제 1. 전체 도서 조회
+
+모든 도서 정보를 조회하는 API를 작성한다.
+
+요청
+GET /books
+실행 SQL
+SELECT
+    id,
+    title,
+    author,
+    category,
+    price,
+    stock
+FROM books
+반환 형태
+List<BookVO>
+문제 2. 도서 번호를 이용한 단건 조회
+
+도서 번호를 이용하여 특정 도서를 조회한다.
+
+요청 예시
+GET /books/1
+조건
+
+@PathVariable을 사용한다.
+
+SQL 조건
+WHERE id = ?
+반환 형태
+BookVO
+문제 3. 도서 등록
+
+새로운 도서를 등록하는 API를 작성한다.
+
+요청
+POST /books
+요청 데이터
+{
+    "title": "Spring Security",
+    "author": "김개발",
+    "category": "프로그래밍",
+    "price": 33000,
+    "stock": 6
+}
+조건
+
+Controller에서 JSON 데이터를 @RequestBody를 이용하여 받는다.
+
+등록 SQL은 Mapper XML에 작성한다.
+
+성공하면 영향을 받은 행의 개수를 반환한다.
+
+문제 4. 도서 수정
+
+도서 번호를 기준으로 도서 정보를 수정한다.
+
+요청
+PUT /books/1
+요청 데이터
+{
+    "title": "자바의 정석 개정판",
+    "author": "남궁성",
+    "category": "프로그래밍",
+    "price": 35000,
+    "stock": 15
+}
+
+URL의 id는 @PathVariable 로 받는다.
+
+수정할 데이터는 @RequestBody 로 받는다.
+
+Controller에서 URL로 전달받은 id를 BookVO에 저장한 후 Service로 전달한다.
+
+문제 5. 도서 삭제
+
+도서 번호를 이용하여 도서를 삭제한다.
+
+요청
+DELETE /books/1
+조건
+
+@PathVariable을 사용한다.
+
+삭제 성공 시 영향을 받은 행의 수를 반환한다.
+
+문제 6. 카테고리별 도서 조회
+
+특정 카테고리에 속한 도서를 조회한다.
+
+요청 예시
+GET /books/category?name=프로그래밍
+
+@RequestParam을 사용한다.
+
+다음 조건으로 SQL을 작성한다.
+
+WHERE category = ?
+
+반환 형태:
+
+List<BookVO>
+
+예상 결과:
+
+자바의 정석
+스프링 부트 입문
+리액트 시작하기
+
+문제 7. 도서 제목 검색
+
+도서 제목에 특정 문자열이 포함된 데이터를 검색한다.
+
+요청 예시
+GET /books/search?title=자바
+
+MySQL의 LIKE를 사용한다.
+
+MyBatis에서는 다음 형식을 활용할 수 있다.
+
+LIKE CONCAT('%', #{title}, '%')
+
+반환 형태:
+
+List<BookVO>
+
+문제 8. 가격 이상의 도서 조회
+
+사용자가 입력한 가격 이상의 도서를 조회한다.
+
+요청
+GET /books/price?min=30000
+
+조건:
+
+WHERE price >= ?
+
+조회 결과는 가격이 낮은 순서로 정렬한다.
+
+ORDER BY price ASC
+
+예상 결과:
+
+자바의 정석       30000
+리액트 시작하기   32000
+MySQL 완벽 가이드 35000
+알고리즘 문제 해결 40000

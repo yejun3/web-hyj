@@ -1,0 +1,298 @@
+시스템 작성시 일반적으로 DB/VO -> DAO -> XML -> Service -> Controller 순서(안쪽에서 바깥쪽으로)로 진행
+
+1. VO 클래스 (ReservationVO.java)
+역할: DB의 reservation 테이블 데이터를 자바 객체로 묶어주는 데이터 바구니입니다.
+데이터 흐름: Controller ↔ Service ↔ DAO ↔ XML ↔ DB 전 계층을 이동합니다.
+
+package com.korea.petclinic.vo; // 이 파일이 위치한 패키지 경로
+
+import java.time.LocalDate; // 날짜(YYYY-MM-DD) 타입을 다루기 위한 자바 표준 라이브러리
+import lombok.Data;         // Getter, Setter, toString 등을 자동 생성해주는 Lombok 라이브러리
+
+@Data // Lombok 어노테이션: 모든 필드의 Getter/Setter, equals, hashCode, toString 메서드를 자동 작성
+public class ReservationVO {
+
+    private Long id;                  // [예약 번호] DB의 'id' (BIGINT)와 매핑. 데이터 식별자
+    private String petName;           // [반려동물 이름] DB의 'pet_name' (VARCHAR)과 매핑
+    private String ownerName;         // [보호자 이름] DB의 'owner_name' (VARCHAR)과 매핑
+    private String animalType;        // [동물 종류] DB의 'animal_type' (VARCHAR)과 매핑 (예: 강아지, 고양이)
+    private String doctorName;        // [담당 수의사] DB의 'doctor_name' (VARCHAR)과 매핑
+    private LocalDate reservationDate;// [예약 날짜] DB의 'reservation_date' (DATE)와 매핑 (예: 2026-07-25)
+    private String status;            // [예약 상태] DB의 'status' (VARCHAR)과 매핑 (예: 예약, 진료완료)
+    private int price;                // [예상 진료비] DB의 'price' (INT)와 매핑
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+2. DAO 인터페이스 (ReservationDAO.java)
+역할: 자바 코드에서 DB에 접근하기 위한 **메서드 목록(명세서)**입니다.
+데이터 흐름: Service에서 호출 받아 파라미터를 들고 ReservationMapper.xml의 동일한 id 태그로 넘깁니다.
+
+package com.korea.petclinic.dao; // 이 인터페이스가 위치한 패키지 경로
+
+import java.util.List;           // 여러 개 데이터를 목록으로 받기 위한 자바 기본 인터페이스
+import java.util.Map;            // Key-Value 형태의 데이터를 다루기 위한 자바 기본 인터페이스
+import org.apache.ibatis.annotations.Mapper; // MyBatis 매퍼 선언용 어노테이션
+import org.apache.ibatis.annotations.Param;  // XML로 파라미터 이름을 지정해서 넘길 때 사용하는 어노테이션
+import com.korea.petclinic.vo.ReservationVO;  // VO 객체 불러오기
+
+@Mapper // MyBatis 어노테이션: 이 인터페이스를 MyBatis Mapper로 등록하고 XML 파일과 1:1 연결
+public interface ReservationDAO {
+
+    // [전체 조회] Service -> DAO -> XML(id="findAll") -> DB의 전체 목록을 List<ReservationVO>로 받아 Service로 반환
+    List<ReservationVO> findAll();
+
+    // [단건 조회] Service로부터 id(예약번호)를 받아 XML(id="findById")의 #{id}로 전달 -> DB 조회 후 VO로 Service에 반환
+    ReservationVO findById(Long id);
+
+    // [등록] Service로부터 reservation(입력받은 VO)을 받아 XML(id="insert")로 전달 -> DB Insert 후 영향받은 행 수(1)를 Service로 반환
+    int insert(ReservationVO reservation);
+
+    // [수정] Service로부터 reservation(수정할 VO)을 받아 XML(id="update")로 전달 -> DB Update 후 영향받은 행 수(1)를 Service로 반환
+    int update(ReservationVO reservation);
+
+    // [삭제] Service로부터 id를 받아 XML(id="delete")로 전달 -> DB Delete 후 영향받은 행 수(1)를 Service로 반환
+    int delete(Long id);
+
+    // [조건 검색] Service에서 받은 searchType(검색조건)과 keyword(검색어)를 @Param으로 이름을 명시하여 XML(id="searchDetail")로 전달 -> 검색 결과를 List로 Service에 반환
+    List<ReservationVO> searchDetail(@Param("searchType") String searchType, @Param("keyword") String keyword);
+
+    // [진료비 정렬] Service에서 받은 sort값("asc" 또는 "desc")을 XML(id="findAllOrder")로 전달 -> 정렬된 목록을 List로 Service에 반환
+    List<ReservationVO> findAllOrder(@Param("sort") String sort);
+
+    // [상태별 카운트] Service에서 호출 받아 XML(id="findStatusCount")로 전달 -> DB의 GROUP BY 결과를 List<Map> 형태(key: status, value: count)로 받아 Service에 반환
+    List<Map<String, Object>> findStatusCount();
+}
+-----------------------------------------------------------------------------------------------------------------------------------------
+3. MyBatis Mapper XML (ReservationMapper.xml)
+역할: DAO 메서드의 이름을 받아 실제 MySQL 쿼리문을 실행하는 영역입니다.
+데이터 흐름: DAO에서 매개변수(#{...})를 넘겨받아 DB로 SQL을 보낸 뒤, DB 반환 결과를 VO/Map으로 포장하여 DAO에 넘깁니다.
+
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace: 이 XML이 자바의 'com.korea.petclinic.dao.ReservationDAO' 인터페이스와 1:1 연동됨을 선언 -->
+<mapper namespace="com.korea.petclinic.dao.ReservationDAO">
+
+    <!-- [문제 3: 전체 조회] DAO.findAll()이 호출되면 실행 -> DB 테이블의 모든 행을 조회하여 VO 타입으로 매핑 후 DAO로 전달 -->
+    <select id="findAll" resultType="com.korea.petclinic.vo.ReservationVO">
+        SELECT * FROM reservation
+    </select>
+
+    <!-- [문제 4: 단건 조회] DAO.findById(id)에서 넘겨받은 id 값을 #{id}에 바인딩 -> 조건에 맞는 1개 행을 VO로 전달 -->
+    <select id="findById" resultType="com.korea.petclinic.vo.ReservationVO">
+        SELECT * FROM reservation WHERE id = #{id}
+    </select>
+
+    <!-- [문제 5: 등록] DAO.insert(reservation)에서 받아온 VO의 필드값들(petName 등)을 DB 컬럼에 각각 추가 -->
+    <insert id="insert">
+        INSERT INTO reservation (pet_name, owner_name, animal_type, doctor_name, reservation_date, status, price)
+        VALUES (#{petName}, #{ownerName}, #{animalType}, #{doctorName}, #{reservationDate}, #{status}, #{price})
+    </insert>
+
+    <!-- [문제 6: 수정] DAO.update(reservation)에서 받아온 VO의 id값에 해당하는 행을 찾아서 나머지 정보들을 DB에 수정 업데이트 -->
+    <update id="update">
+        UPDATE reservation
+        SET pet_name = #{petName},
+            owner_name = #{ownerName},
+            animal_type = #{animalType},
+            doctor_name = #{doctorName},
+            reservation_date = #{reservationDate},
+            status = #{status},
+            price = #{price}
+        WHERE id = #{id}
+    </update>
+
+    <!-- [문제 7: 삭제] DAO.delete(id)에서 넘어온 id에 해당하는 DB 행을 삭제 -->
+    <delete id="delete">
+        DELETE FROM reservation WHERE id = #{id}
+    </delete>
+
+    <!-- [문제 8: 동적 검색] DAO.searchDetail에서 넘어온 searchType 값에 따라 SQL 조건절(WHERE)을 가변적으로 분기 생성 -->
+    <select id="searchDetail" resultType="com.korea.petclinic.vo.ReservationVO">
+        SELECT * FROM reservation
+        <where>
+            <choose>
+                <!-- searchType이 'pet'이면 반려동물 이름 검색 -->
+                <when test="searchType == 'pet'">
+                    pet_name LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+                <!-- searchType이 'owner'이면 보호자 이름 검색 -->
+                <when test="searchType == 'owner'">
+                    owner_name LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+                <!-- searchType이 'doctor'이면 수의사 이름 검색 -->
+                <when test="searchType == 'doctor'">
+                    doctor_name LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+            </choose>
+        </where>
+    </select>
+
+    <!-- [문제 9: 정렬 조회] DAO.findAllOrder에서 넘어온 sort값에 따라 오름차순/내림차순 정렬 SQL 생성 -->
+    <select id="findAllOrder" resultType="com.korea.petclinic.vo.ReservationVO">
+        SELECT * FROM reservation
+        <choose>
+            <when test="sort == 'asc'">
+                ORDER BY price ASC  <!-- 진료비 낮은 순 -->
+            </when>
+            <when test="sort == 'desc'">
+                ORDER BY price DESC <!-- 진료비 높은 순 -->
+            </when>
+            <otherwise>
+                ORDER BY id DESC    <!-- 기본값: 최신순 -->
+            </otherwise>
+        </choose>
+    </select>
+
+    <!-- [문제 10: 상태별 카운트] DB의 GROUP BY 구문을 실행해 상태명과 개수(count)를 Map 형태(Key-Value)로 반환 -->
+    <select id="findStatusCount" resultType="map">
+        SELECT status, COUNT(*) AS count
+        FROM reservation
+        GROUP BY status
+    </select>
+
+</mapper>
+--------------------------------------------------------------------------------------------------------------------------------------------
+4. Service 클래스 (ReservationService.java)
+역할: 비즈니스 로직을 처리하는 중앙 처리 장치입니다.
+데이터 흐름: Controller에게 전달받은 요청 파라미터를 DAO에 전달하고, DAO가 DB에서 가져온 결과물을 검증/가공해서 Controller로 반환합니다.
+
+package com.korea.petclinic.service; // 이 파일이 위치한 패키지 경로
+
+import java.util.List;
+import java.util.Map;
+import org.springframework.stereotype.Service; // 비즈니스 계층 서비스 빈으로 등록하는 어노테이션
+import com.korea.petclinic.dao.ReservationDAO;   // DB 접근용 DAO 인터페이스 불러오기
+import com.korea.petclinic.vo.ReservationVO;    // VO 객체 불러오기
+import lombok.RequiredArgsConstructor;          // final 필드에 대한 생성자를 자동 생성하는 Lombok 어노테이션
+
+@Service               // Spring이 관리하는 서비스 객체(Bean)로 등록
+@RequiredArgsConstructor // final 키워드가 붙은 reservationDAO 변수의 생성자를 자동 작성하여 의존성 주입(DI) 받음
+public class ReservationService {
+
+    private final ReservationDAO reservationDAO; // DB 처리를 대행할 DAO 객체 주입
+
+    // [전체 조회] Controller가 호출 -> DAO.findAll() 호출 -> DB 결과를 받아서 Controller로 그대로 전달
+    public List<ReservationVO> findAll() {
+        return reservationDAO.findAll();
+    }
+
+    // [단건 조회] Controller가 보낸 id -> DAO.findById(id) 호출 -> DB 조회 결과 VO를 Controller로 전달
+    public ReservationVO findById(Long id) {
+        return reservationDAO.findById(id);
+    }
+
+    // [등록] Controller가 보낸 reservation(VO) -> DAO.insert() 호출 -> 실행결과(행 수)를 Controller로 전달
+    public int insert(ReservationVO reservation) {
+        return reservationDAO.insert(reservation);
+    }
+
+    // [수정] Controller가 보낸 reservation(VO) -> DAO.update() 호출 -> 실행결과(행 수)를 Controller로 전달
+    public int update(ReservationVO reservation) {
+        return reservationDAO.update(reservation);
+    }
+
+    // [삭제] Controller가 보낸 id -> DAO.delete(id) 호출 -> 실행결과(행 수)를 Controller로 전달
+    public int delete(Long id) {
+        return reservationDAO.delete(id);
+    }
+
+    // [검색] Controller가 보낸 searchType, keyword -> DAO.searchDetail() 호출 -> 검색 결과를 Controller로 전달
+    public List<ReservationVO> searchDetail(String searchType, String keyword) {
+        return reservationDAO.searchDetail(searchType, keyword);
+    }
+
+    // [정렬] Controller가 보낸 sort -> DAO.findAllOrder() 호출 -> 정렬된 결과를 Controller로 전달
+    public List<ReservationVO> findAllOrder(String sort) {
+        return reservationDAO.findAllOrder(sort);
+    }
+
+    // [상태별 카운트] Controller 호출 -> DAO.findStatusCount() 호출 -> 집계 결과를 Controller로 전달
+    public List<Map<String, Object>> findStatusCount() {
+        return reservationDAO.findStatusCount();
+    }
+}
+-----------------------------------------------------------------------------------------------------------------------------------------------
+5. Controller 클래스 (ReservationController.java)
+역할: 외부 웹 사용자(프론트엔드/Postman)의 HTTP 요청을 가장 먼저 받아 처리하는 관문입니다.
+데이터 흐름: URL/JSON 형태의 데이터를 받아 Service로 보낸 뒤, Service에서 돌려받은 자바 객체(VO, List)를 JSON 문자열로 자동 변환하여 외부 웹 사용자에 응답 전송합니다.
+
+package com.korea.petclinic.controller; // 이 파일이 위치한 패키지 경로
+
+import java.util.List;
+import java.util.Map;
+import org.springframework.web.bind.annotation.*; // Spring Web 어노테이션 모음 (@GetMapping, @RequestBody 등)
+import com.korea.petclinic.service.ReservationService; // 비즈니스 로직 Service 불러오기
+import com.korea.petclinic.vo.ReservationVO;           // VO 객체 불러오기
+import lombok.RequiredArgsConstructor;                 // 의존성 주입용 Lombok 어노테이션
+
+@RestController                 // @Controller + @ResponseBody. 자바 객체를 JSON 데이터 형식으로 변환하여 반환하는 웹 컨트롤러 선언
+@RequestMapping("/reservations") // 이 클래스의 모든 API 메서드는 URL이 "/reservations" 로 시작함
+@RequiredArgsConstructor        // final 변수인 reservationService 객체를 스프링으로부터 자동으로 주입받음
+public class ReservationController {
+
+    private final ReservationService reservationService; // 업무 처리를 요청할 Service 객체
+
+    // [문제 3: GET /reservations] 전체 목록 조회
+    // 웹 브라우저의 GET 요청 수신 -> Service.findAll() 실행 -> List 목록을 JSON 배열 형태로 사용자에게 전달
+    @GetMapping
+    public List<ReservationVO> findAll() {
+        return reservationService.findAll();
+    }
+
+    // [문제 4: GET /reservations/{id}] 예약 번호 단건 조회 (예: /reservations/1)
+    // @PathVariable: URL의 {id} 자리에 들어오는 값(1)을 자바 Long 변수 'id'로 파싱해서 수집
+    // 수집된 id -> Service.findById(id) 호출 -> 조회된 VO 1개를 JSON으로 사용자에게 전달
+    @GetMapping("/{id}")
+    public ReservationVO findById(@PathVariable Long id) {
+        return reservationService.findById(id);
+    }
+
+    // [문제 5: POST /reservations] 새로운 예약 등록
+    // @RequestBody: 웹 클라이언트가 보낸 JSON 데이터 Body를 자바 'ReservationVO' 객체의 필드에 자동으로 매핑 주입
+    // 주입받은 reservation VO -> Service.insert()로 전달 -> 처리된 결과 숫자를 사용자에게 전달
+    @PostMapping
+    public int insert(@RequestBody ReservationVO reservation) {
+        return reservationService.insert(reservation);
+    }
+
+    // [문제 6: PUT /reservations/{id}] 기존 예약 수정 (예: /reservations/1)
+    // @PathVariable id: URL에서 수정할 예약 번호를 수집
+    // @RequestBody reservation: 수정할 새 정보가 담긴 JSON 데이터를 VO 객체로 수집
+    // reservation.setId(id)로 VO에 수정할 번호를 넣어준 뒤 Service.update() 호출 -> 결과 전달
+    @PutMapping("/{id}")
+    public int update(@PathVariable Long id, @RequestBody ReservationVO reservation) {
+        reservation.setId(id); // URL에서 넘어온 id 값을 VO 객체에 채움
+        return reservationService.update(reservation);
+    }
+
+    // [문제 7: DELETE /reservations/{id}] 예약 삭제 (예: /reservations/3)
+    // @PathVariable id: URL에서 삭제할 번호를 수집하여 Service.delete(id) 전달 -> 처리 결과(1)를 사용자에게 전달
+    @DeleteMapping("/{id}")
+    public int delete(@PathVariable Long id) {
+        return reservationService.delete(id);
+    }
+
+    // [문제 8: GET /reservations/search-detail?searchType=pet&keyword=초코] 검색 조건 조회
+    // @RequestParam: URL의 쿼리 스트링(?searchType=...&keyword=...) 파라미터 값을 각각 자바 변수에 수집
+    // 수집한 searchType과 keyword -> Service.searchDetail() 호출 -> 검색된 목록을 JSON으로 전달
+    @GetMapping("/search-detail")
+    public List<ReservationVO> searchDetail(@RequestParam String searchType, @RequestParam String keyword) {
+        return reservationService.searchDetail(searchType, keyword);
+    }
+
+    // [문제 9: GET /reservations/sort?sort=asc] 진료비 정렬 조회
+    // @RequestParam: URL 파라미터 ?sort=asc 수집 -> Service.findAllOrder("asc") 호출 -> 정렬된 목록을 JSON으로 전달
+    @GetMapping("/sort")
+    public List<ReservationVO> findAllOrder(@RequestParam String sort) {
+        return reservationService.findAllOrder(sort);
+    }
+
+    // [문제 10: GET /reservations/status-count] 상태별 예약 수 집계 조회
+    // 요청 수신 -> Service.findStatusCount() 호출 -> 집계된 Map 리스트(예: [{"status":"예약", "count":2}])를 JSON으로 전달
+    @GetMapping("/status-count")
+    public List<Map<String, Object>> findStatusCount() {
+        return reservationService.findStatusCount();
+    }
+} 

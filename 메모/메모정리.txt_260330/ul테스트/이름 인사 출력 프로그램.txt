@@ -1,0 +1,75 @@
+이름 인사 출력 프로그램
+사용자가 화면에 이름을 입력하고 버튼을 누르면, JS의 fetch()를 이용하여
+Springboot의 Controller로 이름을 전송한다.
+Controller는 전달받은 이름을 Service로 전달하고, Service는 인사 문장을 생성하여 Controller로 반환한다.
+Controller는 그 결과를 다시 브라우저에 반환한다.
+
+프로젝트 : com.korea.test
+
+브라우저에 나올 html ,js는 frontend라고 폴더 만들어서 작성하기
+
+요청주소 GET /api/hello?name=xxx
+
+controller : HelloController
+- public String hello();
+
+service : HelloService
+- public String getHelloMessage(String name)
+- 반환값은 안녕하세요, xxx님!
+
+HTML 작성 조건
+6-1. 제목
+이름 인사 프로그램
+
+6-2. 입력창
+<input
+    type="text"
+    id="nameInput"
+    placeholder="이름을 입력하세요">
+
+6-3. 버튼
+id: helloBtn
+텍스트: 인사하기
+
+6-4. 결과 영역
+<p id="result"></p>
+
+JavaScript 작성 조건
+
+7-1. 요소 가져오기
+nameInput
+helloBtn
+result
+
+7-2. 입력값 처리
+const name = nameInput.value.trim();
+
+7-3. 입력값 검사
+이름을 입력하세요.
+
+7-4. fetch 요청
+fetch(
+    "/api/hello?name="
+    + encodeURIComponent(name)
+)
+7-5. 응답 처리
+response.text()
+
+html -> spring OK 콘솔에서 이름 확인 
+
+spring -> html
+
+CORS (Cross-Origin Resource Sharing)
+교차 출처 리소스 공유
+
+출처 (Origin)
+- 프로토콜, 호스트주소, 포트 번호 까지 모두 합친 주소를 의미한다.
+- 서버의 위치를 찾아가기 위해 필요한 가장 기본적인 것들을 합쳐놓은 것
+
+동일 출처 정책(Same-Origin Policy)
+- 브라우저는 기본적으로 보안을 위해 동일 출처 정책이라는 규칙을 따른다.
+- 같은 출처에서 로드된 웹사이트만 서로 데이터를 주고받을 수 있다.
+- 다른 출처에서 데이터를 요청하는 것을 제한하는 정책
+- 이 정책은 보안을 위해 존재하는데, 악의적인 웹사이트가 사용자의 브라우저를 이용해 다른 출처에서 데이터를 가져오지 못하게 막는 역할을 한다.
+
+

@@ -25,6 +25,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TodoDTO {
+	private String userId;
 	private Long id;
 	private String title;
 	private boolean done;
@@ -32,12 +33,22 @@ public class TodoDTO {
 	//사용자의 요청을 받아서 데이터들을 DTO객체에 넣는다.
 	//DB에 전달할 때는 무조건 Entity타입이어야한다.
 	public TodoDTO(final TodoEntity entity) {
+		this.userId =entity.getUserId();
 		this.id = entity.getId();
 		this.title = entity.getTitle();
 		this.done = entity.isDone();
 	}
 	
+	//DTO 타입을 Entity 타입으로 바꾸는 toEntity 메서드 작성하기 
 	
+	public static TodoEntity toEntity(TodoDTO dto) {
+		return TodoEntity.builder()
+				.userId(dto.getUserId())
+				.id(dto.getId())
+				.title(dto.getTitle())
+				.done(dto.isDone())
+				.build();
+	}
 	
 	
 	
