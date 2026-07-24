@@ -113,7 +113,8 @@ saveBtn.addEventListener("click", () => {
         doctorName: doctorName.value,
         reservationDate: reservationDate.value,
         status: status.value,
-        price: parseInt(price.value)
+        //price: parseInt(price.value)
+        price : Number(price.value)
     };
 
     // ID 유무에 따라 등록(POST) / 수정(PUT) 분기 처리
@@ -130,12 +131,24 @@ saveBtn.addEventListener("click", () => {
 // 3. 서버 통신 보조 함수들 (신규 등록, 수정, 삭제)
 // ==========================================
 
+// ① const insertReservation = (reservation) => { ... }
+// 예약하기 
+//reservation은 우리가 서버로 보낼 예약 데이터(이름, 날짜, 인원 등)
+// ② fetch(API_URL, { ... })
+// 구조: fetch(주소, 옵션({ ... })) 형태
+//3. 요약 흐름도
+// 함수 호출 (insertReservation(내_예약정보))
+// ➔ fetch 발동 (서버 API_URL로 보낼 준비)
+// ➔ POST 방식을 지정하고 데이터 형식을 JSON이라 밝힘
+// ➔ 자바스크립트 객체를 JSON 문자열로 바꿔서(body) 보내기 완료!
+
 // [신규 등록 - POST]
 const insertReservation = (reservation) => {
-    fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(reservation)
+    // 함수를 선언  reservation을 매개변수를 받는 화살표함수
+    fetch(API_URL, { //보낼 서버 주소
+        method: "POST", //보내는 방식
+        headers: { "Content-Type": "application/json" }, //포장지 json 형태
+        body: JSON.stringify(reservation) // 보내는 내용물 
     })
     .then(res => {
         if (res.ok) {

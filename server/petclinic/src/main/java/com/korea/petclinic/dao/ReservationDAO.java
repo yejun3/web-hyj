@@ -24,4 +24,6 @@ public interface ReservationDAO {
     List<ReservationVO> findAllOrder(@Param("sort") String sort);
 
     List<Map<String, Object>> findStatusCount();
+
+	Integer amountprice();
 }

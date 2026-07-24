@@ -20,6 +20,7 @@ public class ReservationService {
     public ReservationVO findById(Long id) {
         return reservationDAO.findById(id);
     }
+    
 
     public int insert(ReservationVO reservation) {
         return reservationDAO.insert(reservation);
@@ -44,4 +45,8 @@ public class ReservationService {
     public List<Map<String, Object>> findStatusCount() {
         return reservationDAO.findStatusCount();
     }
+
+	public Integer amountprice() {
+		return reservationDAO.amountprice();
+	}
 }

@@ -20,6 +20,6 @@ public class ReservationVO {
 
 	private String status;
 
-	private int price;
+	private int count;
 
 }
