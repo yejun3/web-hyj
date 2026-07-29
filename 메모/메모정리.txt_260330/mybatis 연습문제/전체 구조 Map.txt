@@ -1,0 +1,54 @@
+전체 구조 Map
+const insertReservation = (reservation) => {
+// [1] 함수 선언 (예약 데이터를 매개변수로 받음)
+
+    fetch(API_URL, {
+    // [2] 어디로 보내나? (서버 주소)
+
+        // [3] 어떻게 보내나? (옵션 객체)
+        method: "POST",                           // 1) 보낼 방식 (등록/추가)
+        headers: { "Content-Type": "application/json" }, // 2) 포장지 라벨 (JSON 형식이야!)
+        body: JSON.stringify(reservation)         // 3) 내용물 (상자에 담을 데이터)
+    })
+}
+
+~ 각 요소별 상세 설명 ~
+① const insertReservation = (reservation) => { ... }
+역할: 화살표 함수(Arrow Function)를 정의한 부분입니다.
+
+비유: "예약하기" 기능을 가진 버튼/기계를 만드
+
+는 것입니다.
+
+reservation은 우리가 서버로 보낼 예약 데이터(이름, 날짜, 인원 등)입니다.
+
+② fetch(API_URL, { ... })
+역할: 서버와 통신(요청)을 담당하는 자바스크립트 내장 함수입니다.
+
+구조: fetch(주소, 옵션) 형태로 작성합니다.
+
+첫 번째 인자 (API_URL): 데이터를 전달받을 서버의 주소(URL)입니다.
+
+두 번째 인자 ({ ... }): 어떤 방식으로, 어떤 내용을 담아 보낼지 적어두는 설정(옵션) 객체입니다.
+
+③ 옵션 객체 내용 (method, headers, body)
+1) method: "POST"
+의미: 서버에 요청을 보낼 목적(HTTP 메서드)을 지정합니다.
+
+특징: 데이터를 단순 조회할 때는 GET을 쓰고, 새로운 데이터를 등록/생성할 때는 POST를 씁니다.
+
+2) headers: { "Content-Type": "application/json" }
+의미: 서버에게 "내가 보낼 내용물의 형식"을 알려주는 안내표(헤더)입니다.
+
+특징: "Content-Type": "application/json"은 "지금 보낼 데이터는 JSON 형태의 텍스트입니다"라고 알리는 표준 약속입니다.
+
+3) body: JSON.stringify(reservation)
+의미: 서버에 실제로 전달할 데이터 본문입니다.
+
+핵심: 인터넷으로 데이터를 주고받을 때는 자바스크립트 객체 형태(예: { name: "홍길동" })로 바로 보낼 수 없습니다. 그래서 JSON.stringify()를 사용해 객체를 문자열(JSON)로 변환해서 보냅니다.
+
+3. 요약 흐름도
+함수 호출 (insertReservation(내_예약정보))
+➔ fetch 발동 (서버 API_URL로 보낼 준비)
+➔ POST 방식을 지정하고 데이터 형식을 JSON이라 밝힘
+➔ 자바스크립트 객체를 JSON 문자열로 바꿔서(body) 보내기 완료!

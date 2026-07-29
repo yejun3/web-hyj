@@ -1,3 +1,23 @@
+데이터 흐름
+[클라이언트 / 프론트엔드]
+       │
+       ▼  ① 포스트맨으로 HTTP 요청 (예: GET /reservations/1)
+[Controller (REST API)] : 요청 수신, 파라미터 추출 (@PathVariable, @RequestBody 등)
+       │
+       ▼  ② 비즈니스 로직 호출
+[Service (서비스 계층)] : 트랜잭션 및 비즈니스 데이터 가공
+       │
+       ▼  ③ DB 접근 메서드 호출
+[DAO / Mapper Interface] : Java 메서드와 MyBatis XML 연동
+       │
+       ▼  ④ SQL 실행 및 결과 매핑
+[MyBatis Mapper XML] : 데이터베이스와 통신 (SQL 실행)
+       │
+       ▼  ⑤ DB 조회 결과
+  [MySQL (DB)]
+
+
+
 1. VO 클래스 (ReservationVO.java)
 역할: DB의 reservation 테이블 데이터를 자바 객체로 묶어주는 데이터 바구니입니다.
 데이터 흐름: Controller ↔ Service ↔ DAO ↔ XML ↔ DB 전 계층을 이동합니다.
